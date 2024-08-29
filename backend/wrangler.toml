@@ -1,9 +1,9 @@
 name = "backend"
 compatibility_date = "2024-08-26"
 
-[vars]
-#DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNDQ3M2ZmOTUtZGMyNS00OTg0LWFhZWItMTc5NDRlZWY3Y2VlIiwidGVuYW50X2lkIjoiNWEyMzVjNzljNzkxYjg0MGFmOGI4YjRmZmY3Njg2YzUxYTBiZjVmMWMzMmFiNTgzNDczNTU4MGFjYmI1ZWE1NSIsImludGVybmFsX3NlY3JldCI6ImUwMjJkZDdjLTRhYjYtNDlhNS04NjI2LTg4NjIzMWRhZGYyMSJ9.B_3JBK5LHsxXj3-EGDwj57bf7OsyH5GIY21c1BnYWOQ"
+# All environmental variable used in the Project is declared here 
 
+[vars]
 
 DATABASE_URL = "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDlhODNjNjktOTVhYS00MzU5LWIwYzAtYjJiMzgyNDRhYzU5IiwidGVuYW50X2lkIjoiZjEyOTBlMDQzNzc1MDRiZjA3ZTU1YjUyZTc5YWU0M2M2NGVjNjVjNDJlMjAzMzU3ODk4YzYxZGJiNDFhODAzOCIsImludGVybmFsX3NlY3JldCI6ImM3ZjRhMWZmLTc4YzAtNGNjOC05MzQ4LTdiMzgwOGFjMTQ2NiJ9.rNvMX5gGAFpscKDumA5oe_a6sZZqAmYiSOf--3FYtBM"
 
