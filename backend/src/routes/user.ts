@@ -1,4 +1,4 @@
-import { Context,Hono } from "hono";
+import { Context, Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, verify, sign } from "hono/jwt";
@@ -9,12 +9,11 @@ export const userRouter = new Hono<{
     DATABASE_URL: string;
     JWT_SECRET: string;
   };
- 
 }>();
 
 userRouter.post("/signup", async (c) => {
   console.log("This is user's signup route");
-  
+
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
@@ -26,13 +25,12 @@ userRouter.post("/signup", async (c) => {
         email: body.email,
         name: body.name,
         password: body.password,
-        // posts: body.posts,
       },
     });
     console.log("Create User : ", createUser);
     console.log("User id : ", createUser.id);
     const payload = {
-      id : createUser.id
+      id: createUser.id,
     };
     const token = await sign(payload, c.env.JWT_SECRET);
 
@@ -43,7 +41,6 @@ userRouter.post("/signup", async (c) => {
       Email: createUser.email,
       token: token,
     });
-
   } catch (err) {
     console.log(err);
     return c.json({
@@ -82,4 +79,3 @@ userRouter.post("/signin", async (c) => {
     });
   }
 });
-

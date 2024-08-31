@@ -11,7 +11,6 @@ export const blogsRouter = new Hono<{
   };
   Variables: {
     userid: string;
-
   };
 }>();
 
@@ -35,7 +34,7 @@ blogsRouter.use("/*", async (context, next) => {
       });
     }
     // console.log("Verification is :", verification.name);
-
+    // @ts-ignore
     context.set("userid", verification.id); // this sets the value of  "userid" variable (defined in the hono Variable section) value to the value of "varification.name" [i.e : username = verification.name]
     // console.log(jwt);
     await next();
@@ -125,13 +124,19 @@ blogsRouter.put("/", async (c) => {
 });
 
 // This is a route to get all the blogs by given id
-blogsRouter.get("/:id", async (c) => {
+blogsRouter.get("/get/:id", async (c) => {
   const param = c.req.param("id");
+  console.log("Param given is : ", param);
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
   try {
-    const blogWithId = await prisma.post.findFirst(param);
+    const blogWithId = await prisma.post.findFirst({
+      where: {
+        id: param,
+      },
+    });
+    console.log("Given blog is: ", blogWithId);
 
     return c.json({
       //name: c.var.userid, // accessing the userid variable using var object inside the context just like we use req,res using context
@@ -139,21 +144,21 @@ blogsRouter.get("/:id", async (c) => {
       Your_Requested_blog_is: blogWithId,
     });
   } catch (err) {
+    console.log("Error is :", err);
     return c.json({
       messge: "Oops, Something Went Wrong :(",
     });
   }
 });
 
-// Route to get all the posts
 blogsRouter.get("/bulk", async (c) => {
-  const blogid = c.req.param("id");
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const allPosts = await prisma.post.findMany(blogid);
+  const allPosts = await prisma.post.findMany();
   return c.json({
     messge: "This is a route to get all the posts",
+    posts: allPosts,
   });
 });
