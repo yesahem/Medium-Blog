@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, verify, sign } from "hono/jwt";
 import { log } from "console";
+import { z } from "zod";
+import {SignupSchema, SigninSchema,} from "@shishuranjan/backend-common/dist/validations";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -10,6 +12,8 @@ export const userRouter = new Hono<{
     JWT_SECRET: string;
   };
 }>();
+
+// Validation Checks
 
 userRouter.post("/signup", async (c) => {
   console.log("This is user's signup route");
@@ -19,7 +23,14 @@ userRouter.post("/signup", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const body = await c.req.json();
+    const body :SignupSchema= await c.req.json();
+
+    if (!body) {
+      c.status(411);
+      return c.json({
+        message: "Invalid Inputs",
+      });
+    }
     const createUser = await prisma.user.create({
       data: {
         email: body.email,
@@ -50,11 +61,23 @@ userRouter.post("/signup", async (c) => {
 });
 
 userRouter.post("/signin", async (c) => {
+  // Add user logic to verify the user JWT and then send the login message
+
+  const headers = c.req.header("Authorization");
+  console.log(headers);
+
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    const body = await c.req.json();
+    const body:SigninSchema = await c.req.json();
+
+    if (!body) {
+      c.status(411);
+      return c.json({
+        message: "Invalid Inputs",
+      });
+    }
     const getUser = await prisma.user.findUnique({
       where: {
         email: body.email,

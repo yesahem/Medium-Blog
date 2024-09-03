@@ -3,6 +3,8 @@ import { Prisma, PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { cors } from "hono/cors";
 import { decode, verify, sign } from "hono/jwt";
+import { z } from "zod";
+import { BlogSchema, UpdateBlogSchema } from "@shishuranjan/backend-common/dist/validations";
 
 export const blogsRouter = new Hono<{
   Bindings: {
@@ -14,6 +16,7 @@ export const blogsRouter = new Hono<{
   };
 }>();
 
+// middleware
 blogsRouter.use("/*", async (context, next) => {
   console.log("This is a middleware route");
   try {
@@ -35,7 +38,8 @@ blogsRouter.use("/*", async (context, next) => {
     }
     // console.log("Verification is :", verification.name);
     // @ts-ignore
-    context.set("userid", verification.id); // this sets the value of  "userid" variable (defined in the hono Variable section) value to the value of "varification.name" [i.e : username = verification.name]
+    context.set("userid", verification.id);
+    console.log("middleware passes"); // this sets the value of  "userid" variable (defined in the hono Variable section) value to the value of "varification.name" [i.e : username = verification.name]
     // console.log(jwt);
     await next();
   } catch (err) {
@@ -48,7 +52,6 @@ blogsRouter.use("/*", async (context, next) => {
 // Routes to initialise a blog post
 blogsRouter.post("/", async (c) => {
   const userid = c.var.userid;
-  // console.log(userid);
 
   // const prisma = new PrismaClient({
   //   datasources:{
@@ -68,7 +71,14 @@ blogsRouter.post("/", async (c) => {
     });
   }
 
-  const body = await c.req.json();
+  const body:BlogSchema = await c.req.json();
+
+  if (!body) {
+    c.status(411);
+    return c.json({
+      message: "Invalid Inputs",
+    });
+  }
   console.log(body);
   try {
     const setBlogposts = await prisma.post.create({
@@ -76,7 +86,6 @@ blogsRouter.post("/", async (c) => {
         title: body.title,
         content: body.content,
         published: body.published,
-        // author: body.author,
         authorId: userid,
       },
     });
@@ -100,7 +109,16 @@ blogsRouter.put("/", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const updatedBody = await c.req.json();
+    const updatedBody:UpdateBlogSchema = await c.req.json();
+    // const {success} = updateBlogSchema.safeParse(updatedBody);
+    if (!updatedBody) {
+      c.status(411);
+      return c.json({
+        message: "Invalid Inputs",
+      });
+    }
+
+    // what console a good error messge if user id provided is invalid to jwt also this is able to update another users blogs fix it by matching with JWT
     const updateBlog = await prisma.post.update({
       where: {
         id: updatedBody.id,
@@ -108,7 +126,6 @@ blogsRouter.put("/", async (c) => {
       data: {
         title: updatedBody.title,
         content: updatedBody.content,
-        author: updatedBody.author,
         published: updatedBody.published,
       },
     });
@@ -118,7 +135,7 @@ blogsRouter.put("/", async (c) => {
     });
   } catch (err) {
     return c.json({
-      mssge: "Oops can't update the blog ",
+      mssge: "Oops can't update the blog ", err,
     });
   }
 });
@@ -141,6 +158,9 @@ blogsRouter.get("/get/:id", async (c) => {
     return c.json({
       //name: c.var.userid, // accessing the userid variable using var object inside the context just like we use req,res using context
       // messge: `This is a blog with route id: ${param}`,
+
+
+      // log messgage that if blogWithId not found then return 404 not found
       Your_Requested_blog_is: blogWithId,
     });
   } catch (err) {
