@@ -4,7 +4,8 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, verify, sign } from "hono/jwt";
 import { log } from "console";
 import { z } from "zod";
-import {SignupSchema, SigninSchema,} from "@shishuranjan/backend-common/dist/validations";
+import { SignupSchema, SigninSchema, } from "@shishuranjan/backend-common/dist/validations";
+import { cors } from "hono/cors";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -12,7 +13,7 @@ export const userRouter = new Hono<{
     JWT_SECRET: string;
   };
 }>();
-
+userRouter.use("/*", cors());
 // Validation Checks
 
 userRouter.post("/signup", async (c) => {
@@ -23,7 +24,7 @@ userRouter.post("/signup", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const body :SignupSchema= await c.req.json();
+    const body: SignupSchema = await c.req.json();
 
     if (!body) {
       c.status(411);
@@ -70,7 +71,7 @@ userRouter.post("/signin", async (c) => {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    const body:SigninSchema = await c.req.json();
+    const body: SigninSchema = await c.req.json();
 
     if (!body) {
       c.status(411);

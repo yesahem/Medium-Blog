@@ -16,6 +16,7 @@ export const blogsRouter = new Hono<{
   };
 }>();
 
+blogsRouter.use("/*", cors())
 // middleware
 blogsRouter.use("/*", async (context, next) => {
   console.log("This is a middleware route");
@@ -49,6 +50,7 @@ blogsRouter.use("/*", async (context, next) => {
   }
 });
 
+
 // Routes to initialise a blog post
 blogsRouter.post("/", async (c) => {
   const userid = c.var.userid;
@@ -71,7 +73,7 @@ blogsRouter.post("/", async (c) => {
     });
   }
 
-  const body:BlogSchema = await c.req.json();
+  const body: BlogSchema = await c.req.json();
 
   if (!body) {
     c.status(411);
@@ -109,7 +111,7 @@ blogsRouter.put("/", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const updatedBody:UpdateBlogSchema = await c.req.json();
+    const updatedBody: UpdateBlogSchema = await c.req.json();
     // const {success} = updateBlogSchema.safeParse(updatedBody);
     if (!updatedBody) {
       c.status(411);
