@@ -25,13 +25,13 @@ const posts: Post[] = [
     title: "Teachers Day",
     description: "Happy Teachers Day to all teachers",
     date: "September 5th, 2024",
-  }, {
-
+  },
+  {
     title: "test 4",
     description: "This is a overview of the fourth blog post.",
     date: "September 10th, 2024",
     id: 4,
-  }
+  },
 ];
 export default function Test() {
   return (

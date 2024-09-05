@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BlogSchema } from "@shishuranjan/backend-common/dist/validations"
+import { BlogSchema } from "@shishuranjan/backend-common/dist/validations";
 import { ColorRing } from "react-loader-spinner";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -10,31 +10,28 @@ interface posts {
   content: String;
   published: Boolean;
   authorId: String;
-};
+}
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
   const [description, setDescription] = useState([]);
   useEffect(() => {
-    axios.get(`https://backend.ahemraj82.workers.dev/api/v1/blog/bulk`, {
-      headers: {
-        //    "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwZGNhYTEzLTM4MjktNGFmNS1hZjU2LWY0NjU5M2JjODVlZSJ9.VziZ5SvhtyiVkwEE2o_PfCWNqddMWUEgd8AlZ32WrLs",
-      }
-    }).then((res) => {
-
-      setPosts(res.data.posts);
-      const description = res.data.posts.map((post) => {
-        setDescription(
-
-          post.title.substring(0, 5)
-        )
-      }
-      )
-      console.log("description is", description)
-    });
+    axios
+      .get(`https://backend.ahemraj82.workers.dev/api/v1/blog/bulk`, {
+        headers: {
+          //    "Content-Type": "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwZGNhYTEzLTM4MjktNGFmNS1hZjU2LWY0NjU5M2JjODVlZSJ9.VziZ5SvhtyiVkwEE2o_PfCWNqddMWUEgd8AlZ32WrLs",
+        },
+      })
+      .then((res) => {
+        setPosts(res.data.posts);
+        const description = res.data.posts.map((post) => {
+          setDescription(post.title.substring(0, 5));
+        });
+        console.log("description is", description);
+      });
   }, []);
-
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -79,14 +76,15 @@ export default function Blog() {
                   </a>
                 </div>
               ))
-            ) : (<ColorRing
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="color-ring-loading"
-              wrapperClass="color-ring-wrapper"
-              colors={['#0390fc', '#0390fc', '#0390fc', '#0390fc', '#0390fc']}
-            />
+            ) : (
+              <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="color-ring-loading"
+                wrapperClass="color-ring-wrapper"
+                colors={["#0390fc", "#0390fc", "#0390fc", "#0390fc", "#0390fc"]}
+              />
             )}
           </div>
         </section>
