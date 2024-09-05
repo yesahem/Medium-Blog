@@ -65,7 +65,7 @@ export default function Blog() {
                     <h2 className="text-2xl font-semibold mb-2">
                       {post.title}
                     </h2>
-                    <p className="text-gray-600 mb-4">{description}</p>
+                    <p className="text-gray-600 mb-4">{post.description}</p>
                     // <p className="text-sm text-gray-500 mb-4">{post.date}</p>
                   </div>
                   <a
@@ -77,13 +77,20 @@ export default function Blog() {
                 </div>
               ))
             ) : (
+
               <ColorRing
                 visible={true}
-                height="80"
-                width="80"
+                height="40"
+                width="40"
                 ariaLabel="color-ring-loading"
                 wrapperClass="color-ring-wrapper"
-                colors={["#0390fc", "#0390fc", "#0390fc", "#0390fc", "#0390fc"]}
+                colors={[
+                  "#0390fc",
+                  "#0390fc",
+                  "#0390fc",
+                  "#0390fc",
+                  "#0390fc",
+                ]}
               />
             )}
           </div>
