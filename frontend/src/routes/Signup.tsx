@@ -1,6 +1,47 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { SyntheticEvent, useState } from "react";
+import { toast } from "react-custom-alert";
+import { SignupSchema } from "@shishuranjan/backend-common/dist/validations";
+import { Link, useNavigate } from "react-router-dom";
+import "react-custom-alert/dist/index.css";
 
+const alertSuccess = () => toast.success("Signup Sucessfull, Redirecting to Login");
+const alertError = () => toast.error("Something Went Wrong");
 export default function SignUp() {
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const navigate = useNavigate();
+
+  function signupHandler(e: SyntheticEvent) {
+    e.preventDefault();
+    console.log("name: ", name);
+    console.log("email: ", email);
+    console.log("password: ", password);
+
+    axios
+      .post("http://localhost:8787/api/v1/user/signup", {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        console.log("Response is: ", res);
+        console.log("res: ", res.data.token);
+        console.log("status: ", res.status);
+        localStorage.setItem(`jwt-token`, res.data.token);
+        alertSuccess();
+        setTimeout(() => {
+          navigate("/signin")
+        }, 2000)
+      })
+      .catch((err) => {
+        console.log("err: ", err);
+        console.log("err.response: ", err.status);
+        alertError();
+      });
+  }
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 flex justify-center items-center">
@@ -28,6 +69,9 @@ export default function SignUp() {
                       type="text"
                       placeholder="Your name"
                       required
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
                       className="block w-full p-2 border rounded"
                     />
                   </div>
@@ -43,6 +87,9 @@ export default function SignUp() {
                       type="email"
                       placeholder="m@example.com"
                       required
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
                       className="block w-full p-2 border rounded"
                     />
                   </div>
@@ -56,6 +103,9 @@ export default function SignUp() {
                     <input
                       id="password"
                       type="password"
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
                       placeholder="Create a password"
                       required
                       className="block w-full p-2 border rounded"
@@ -63,6 +113,7 @@ export default function SignUp() {
                   </div>
                   <div className="mt-4">
                     <button
+                      onClick={signupHandler}
                       type="submit"
                       className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >

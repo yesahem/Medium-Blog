@@ -1,6 +1,47 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { SyntheticEvent, useState } from "react";
+import { toast } from "react-custom-alert";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import "react-custom-alert/dist/index.css";
+
+const alertSuccess = () => toast.success("Login Sucess");
+const alertError = (str: string) => toast.error(`${str}`);
+
+const token = localStorage.getItem("jwt-token");
 
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate()
+  function signinHandler(e: SyntheticEvent) {
+    // e.preventDefault();
+    console.log("email: ", email);
+    console.log("password: ", password);
+    console.log(`you are here `);
+
+    axios.post("http://localhost:8787/api/v1/user/signin", {
+      email: email,
+      password: password,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      console.log("Login Response is :", res);
+      alertSuccess();
+      navigate("/test")
+
+    }).catch((err) => {
+      console.log("Login Error", err.response.data);
+      alertError(err.response.data.messge);
+    })
+    // console.log("Error", e);
+    // alertError();
+
+    console.log("token: ", token);
+    console.log(`hii there`);
+  }
   return (
     <main className="flex-1">
       <section className="w-full py-12 md:py-24 lg:py-32">
@@ -25,6 +66,9 @@ export default function SignIn() {
                     type="email"
                     placeholder="yourmail@example.com"
                     required
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                     className="block w-full p-2 border rounded"
                   />
                 </div>
@@ -39,13 +83,19 @@ export default function SignIn() {
                     id="password"
                     type="password"
                     required
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                     className="block w-full p-2 border rounded"
                     placeholder="Your password"
                   />
                 </div>
               </div>
               <div className="mt-4">
-                <button className="w-full p-2 bg-blue-500 text-white rounded">
+                <button
+                  className="w-full p-2 bg-blue-500 text-white rounded"
+                  onClick={signinHandler}
+                >
                   Sign in
                 </button>
               </div>
@@ -57,13 +107,7 @@ export default function SignIn() {
               </Link>
             </div>
           </div>
-          {/* <img
-            src="/placeholder.svg"
-            width="550"
-            height="550"
-            alt="Login"
-            className="mx-auto aspect-square rounded-xl object-cover sm:w-full lg:order-last"
-          /> */}
+
           <div className=" mt-4 text-center">
             <div className="mt-[15px] text-center justify-center">
               <h3 className="text-9xl font-bold sm:text-5xl xl:text-6xl text-center">

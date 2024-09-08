@@ -11,20 +11,24 @@ interface posts {
   published: Boolean;
   authorId: String;
 }
+const token = localStorage.getItem("jwt-token")
+console.log(token);
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
   const [description, setDescription] = useState([]);
   useEffect(() => {
     axios
-      .get(`https://backend.ahemraj82.workers.dev/api/v1/blog/bulk`, {
+      .get(`http://localhost:8787/api/v1/blog/bulk`, {
         headers: {
           //    "Content-Type": "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwZGNhYTEzLTM4MjktNGFmNS1hZjU2LWY0NjU5M2JjODVlZSJ9.VziZ5SvhtyiVkwEE2o_PfCWNqddMWUEgd8AlZ32WrLs",
+            `Bearer ${token}`
         },
       })
       .then((res) => {
+        console.log(res.data);
+
         setPosts(res.data.posts);
         const description = res.data.posts.map((post) => {
           setDescription(post.title.substring(0, 5));
@@ -69,7 +73,7 @@ export default function Blog() {
                     // <p className="text-sm text-gray-500 mb-4">{post.date}</p>
                   </div>
                   <a
-                    href={`https://backend.ahemraj82.workers.dev/api/v1/blog/get/${post.id}`}
+                    href={`http://localhost:8787/api/v1/blog/get/${post.id}`}
                     className="inline-block text-blue-500 hover:underline"
                   >
                     Read More
