@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 
 const alertSuccess = () => toast.success("Signup Sucessfull, Redirecting to Login");
-const alertError = () => toast.error("Something Went Wrong");
+const alertError = (str: string) => toast.error(str);
 export default function SignUp() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -27,10 +27,18 @@ export default function SignUp() {
         password: password,
       })
       .then((res) => {
-        console.log("Response is: ", res);
-        console.log("res: ", res.data.token);
-        console.log("status: ", res.status);
-        localStorage.setItem(`jwt-token`, res.data.token);
+        console.log(`response is ${res.data.err}`)
+        console.log("Response from backend is (i am Frontend) is: ", res.data.err.issues[0]);
+        //localStorage.setItem(`jwt-token`, res.data.token);
+        if (res.data.err.issues) {
+          console.log(`Something went Wrong`)
+
+          console.log(typeof res.data.err.issues[0].message);
+
+
+          throw new Error(res.data.err.issues[0].message)
+        }
+
         alertSuccess();
         setTimeout(() => {
           navigate("/signin")
@@ -38,14 +46,16 @@ export default function SignUp() {
       })
       .catch((err) => {
         console.log("err: ", err);
-        console.log("err.response: ", err.status);
-        alertError();
+        console.log("err.response: ", err.message);
+        console.log(typeof err);
+
+        alertError(err.message);
       });
   }
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-1 flex justify-center items-center">
-        <section className="w-full py-12 md:py-24 lg:py-32">
+      <div className="w-full py-12 md:py-24 lg:py-32">
+        <div className="flex-1 flex justify-center items-center">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
@@ -130,8 +140,8 @@ export default function SignUp() {
               </div>
             </div>
           </div>
-        </section>
-      </main>
+        </div>
+      </div>
     </div>
   );
 }

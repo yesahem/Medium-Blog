@@ -20,6 +20,7 @@ export default function SignIn() {
     console.log("password: ", password);
     console.log(`you are here `);
 
+
     axios.post("http://localhost:8787/api/v1/user/signin", {
       email: email,
       password: password,
@@ -28,14 +29,28 @@ export default function SignIn() {
         Authorization: `Bearer ${token}`
       }
     }).then((res) => {
-      console.log("Login Response is :", res);
-      alertSuccess();
-      navigate("/test")
+      console.log(res);
+
+      if (res.data.email === email) {
+        if (res.data.password === password) {
+          console.log("Login Response is :", res);
+          alertSuccess();
+          navigate("/blog")
+        }
+        alertError("Incorrect Password")
+      } else {
+        throw new Error("Incorrect Email")
+      }
 
     }).catch((err) => {
-      console.log("Login Error", err.response.data);
+      console.log(`password check ${err}`)
       alertError(err.response.data.messge);
+      console.log("Login Error", err);
     })
+
+
+
+
     // console.log("Error", e);
     // alertError();
 

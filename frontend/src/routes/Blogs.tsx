@@ -12,12 +12,14 @@ interface posts {
   authorId: String;
 }
 const token = localStorage.getItem("jwt-token")
-console.log(token);
+console.log(`this is your token ${token}`);
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
   const [description, setDescription] = useState([]);
+  const [showMessage, setShowMessage] = useState(false)
   useEffect(() => {
+
     axios
       .get(`http://localhost:8787/api/v1/blog/bulk`, {
         headers: {
@@ -27,13 +29,17 @@ export default function Blog() {
         },
       })
       .then((res) => {
-        console.log(res.data);
 
+        console.log(`Posts length:`, res.data.posts.length);
+        if (res.data.posts.length === 0) {
+          setShowMessage(true)
+        }
         setPosts(res.data.posts);
         const description = res.data.posts.map((post) => {
           setDescription(post.title.substring(0, 5));
         });
         console.log("description is", description);
+
       });
   }, []);
 
@@ -49,7 +55,7 @@ export default function Blog() {
             </div>
             <div>
               <Link
-                to="/upload_Blog"
+                to="/upload_blogs"
                 className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
               >
                 Create New Post
@@ -59,6 +65,7 @@ export default function Blog() {
 
           {/* Posts List */}
           <div className="grid gap-6 lg:grid-cols-2">
+
             {posts.length > 0 ? (
               posts.map((post: posts) => (
                 <div
@@ -80,9 +87,12 @@ export default function Blog() {
                   </a>
                 </div>
               ))
-            ) : (
+            ) : showMessage ? (
+              <div className="bg-white p-6 shadow rounded-lg border flex justify-between"
 
-              <ColorRing
+              > Start uploading Blog to get started 🎉 </div>
+            ) : (
+              < ColorRing
                 visible={true}
                 height="40"
                 width="40"

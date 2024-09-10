@@ -8,12 +8,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import { Fetch } from "./components/Fetch";
 import { lazy, Suspense } from "react";
 
+// import Test2 from "./routes/Test2";
+
 const Test = lazy(() => import("./routes/Test"));
 const SignUp = lazy(() => import("./routes/Signup"));
 const SignIn = lazy(() => import("./routes/SignIn"));
 const Blog = lazy(() => import("./routes/Blogs"));
 const Home = lazy(() => import("./routes/Home"));
 const Index = lazy(() => import("./routes/Index"));
+const UploadBlogs = lazy(() => import("./routes/UploadBlogs"))
+
 const Fetch = lazy(() => import("./components/Fetch"));
 
 
@@ -83,16 +87,16 @@ const routes = createBrowserRouter([
       {
         path: "test",
         element: <Test />,
-      },{
-        path: "/upload_blog",
-        element: <Suspense fallback={"Loading...."}><Blog /></Suspense>,
+      }, {
+        path: "upload_blogs",
+        element: <Suspense fallback={"Loading...."}><UploadBlogs /></Suspense>,
       }
     ],
   },
 ]);
 function App() {
   return <RouterProvider router={routes} />
-     
+
 }
 
 export default App;
