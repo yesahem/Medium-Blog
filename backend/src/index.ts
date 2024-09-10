@@ -5,6 +5,8 @@ import { userRouter } from "./routes/user";
 import { blogsRouter } from "./routes/blogs";
 
 
+
+
 const app = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -14,8 +16,6 @@ const app = new Hono<{
       username: string;
     }
 }>();
-
-
 
 
 app.route('/api/v1/blog/', blogsRouter)

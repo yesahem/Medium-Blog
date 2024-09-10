@@ -179,6 +179,7 @@ blogsRouter.get("/bulk", async (c) => {
   }).$extends(withAccelerate());
 
   const allPosts = await prisma.post.findMany();
+  console.log(allPosts)
   return c.json({
     messge: "This is a route to get all the posts",
     posts: allPosts,

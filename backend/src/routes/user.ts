@@ -6,6 +6,7 @@ import { log } from "console";
 import { z } from "zod";
 import { SignupSchema, SigninSchema, } from "@shishuranjan/backend-common/dist/validations";
 import { cors } from "hono/cors";
+import { EmailMessage } from "cloudflare:email";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -16,22 +17,51 @@ export const userRouter = new Hono<{
 userRouter.use("/*", cors());
 // Validation Checks
 
+const signinSchemaUsingZod = z.object({
+  email: z.string().email(),
+  password: z.string().min(8)
+})
+const signupSchemaUsingZod = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string().min(8, "Password must contains at least 8 characters")
+})
+
 userRouter.post("/signup", async (c) => {
+
+  // To add logics to check if the dataBase have the user with the same email or not if not then create user if yes then return the error that user already exist
   console.log("This is user's signup route");
 
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    }).$extends(withAccelerate())
 
     const body: SignupSchema = await c.req.json();
 
-    if (!body) {
+    const isValidCreds = signupSchemaUsingZod.parse(body)
+
+    console.log(`signup ${isValidCreds}`)
+
+    if (!isValidCreds) {
       c.status(411);
       return c.json({
         message: "Invalid Inputs",
       });
     }
+
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: body.email,
+      },
+    });
+    if (userExists) {
+      c.status(403);
+      return c.json({
+        message: "User Already Exists",
+      });
+    }
+
     const createUser = await prisma.user.create({
       data: {
         email: body.email,
@@ -52,11 +82,14 @@ userRouter.post("/signup", async (c) => {
       Username: createUser.name,
       Email: createUser.email,
       token: token,
+      id: createUser.id,
     });
   } catch (err) {
-    console.log(err);
+    console.log(`type of error is ${typeof err}`)
+    console.log(`Error (i am backend): ${err} `);
     return c.json({
       messge: "Some Error occured ",
+      err: err
     });
   }
 });
@@ -72,8 +105,11 @@ userRouter.post("/signin", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const body: SigninSchema = await c.req.json();
+    const isCredsValid = signinSchemaUsingZod.parse(body)
 
-    if (!body) {
+    console.log(`signin ${isCredsValid} `)
+
+    if (!isCredsValid) {
       c.status(411);
       return c.json({
         message: "Invalid Inputs",
@@ -92,9 +128,8 @@ userRouter.post("/signin", async (c) => {
         messge: "User Doesn't Exists",
       });
     } else {
-      return c.json({
-        messge: "user Login Sucessfull",
-      });
+      console.log(getUser)
+      return c.json(getUser);
     }
   } catch (err) {
     // c.status(403)
