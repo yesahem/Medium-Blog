@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 export default function UploadBlogs() {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+
   function blogUploadHandler(e: SyntheticEvent) {
+    // send the Title content to the backend and store in Db 
     e.preventDefault()
     console.log("I am a blog upload handler ")
     console.log(`Title : ${title}`);
@@ -40,7 +42,7 @@ export default function UploadBlogs() {
                       autoFocus
                       placeholder="Title"
                       required
-                      onChange={(e) => setTitle(e.target.value)}
+                      onChange={(e) => setTitle(e.target.value)} // try to implement debouncing here to wait for some time and then change the title and content  
                       className="block w-full p-2 border rounded"
                     />
                   </div>
