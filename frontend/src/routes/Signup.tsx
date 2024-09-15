@@ -1,7 +1,6 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
-import { SignupSchema } from "@shishuranjan/backend-common/dist/validations";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 
@@ -22,20 +21,11 @@ export default function SignUp() {
     console.log("password: ", password);
 
     axios
-      .post(
-        "http://localhost:8787/api/v1/user/signup",
-        {
-          name: name,
-          email: email,
-          password: password,
-        },
-        /*        {
-          headers: {
-            "Content-Type": `Application/json`,
-          },
-        },
-*/
-      )
+      .post("http://localhost:8787/api/v1/user/signup", {
+        name: name,
+        email: email,
+        password: password,
+      })
       .then((res) => {
         // console.log("current");
         console.log(`Response ${res}`);
