@@ -5,7 +5,8 @@ import { SignupSchema } from "@shishuranjan/backend-common/dist/validations";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 
-const alertSuccess = () => toast.success("Signup Sucessfull, Redirecting to Login");
+const alertSuccess = () =>
+  toast.success("Signup Sucessfull, Redirecting to Login");
 const alertError = (str: string) => toast.error(str);
 export default function SignUp() {
   const [password, setPassword] = useState("");
@@ -21,35 +22,39 @@ export default function SignUp() {
     console.log("password: ", password);
 
     axios
-      .post("http://localhost:8787/api/v1/user/signup", {
-        name: name,
-        email: email,
-        password: password,
-      })
+      .post(
+        "http://localhost:8787/api/v1/user/signup",
+        {
+          name: name,
+          email: email,
+          password: password,
+        },
+        /*        {
+          headers: {
+            "Content-Type": `Application/json`,
+          },
+        },
+*/
+      )
       .then((res) => {
-        console.log(`response is ${res.data.err}`)
-        console.log("Response from backend is (i am Frontend) is: ", res.data.err.issues[0]);
-        //localStorage.setItem(`jwt-token`, res.data.token);
-        if (res.data.err.issues) {
-          console.log(`Something went Wrong`)
+        // console.log("current");
+        console.log(`Response ${res}`);
+        console.log(res.data.err);
 
-          console.log(typeof res.data.err.issues[0].message);
+        localStorage.setItem(`jwt-token`, res.data.token);
 
-
-          throw new Error(res.data.err.issues[0].message)
+        if (!res.data.err) {
+          alertSuccess();
+          setTimeout(() => {
+            navigate("/signin");
+          }, 2000);
+        } else {
+          alertError("Invalid Email or Password");
         }
-
-        alertSuccess();
-        setTimeout(() => {
-          navigate("/signin")
-        }, 2000)
       })
       .catch((err) => {
         console.log("err: ", err);
-        console.log("err.response: ", err.message);
-        console.log(typeof err);
-
-        alertError(err.message);
+        alertError(err.response.data.message);
       });
   }
   return (

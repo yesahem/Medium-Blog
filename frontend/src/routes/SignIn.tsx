@@ -13,43 +13,46 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   function signinHandler(e: SyntheticEvent) {
     // e.preventDefault();
     console.log("email: ", email);
     console.log("password: ", password);
     console.log(`you are here `);
 
+    axios
+      .post(
+        "http://localhost:8787/api/v1/user/signin",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then((res) => {
+        console.log(res);
 
-    axios.post("http://localhost:8787/api/v1/user/signin", {
-      email: email,
-      password: password,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      console.log(res);
-
-      if (res.data.email === email) {
-        if (res.data.password === password) {
-          console.log("Login Response is :", res);
-          alertSuccess();
-          navigate("/blog")
+        if (res.data.email === email) {
+          if (res.data.password === password) {
+            console.log("Login Response is :", res);
+            alertSuccess();
+            navigate("/blog");
+          } else {
+            alertError("Incorrect Password");
+          }
+        } else {
+          throw new Error("Incorrect Email");
         }
-        alertError("Incorrect Password")
-      } else {
-        throw new Error("Incorrect Email")
-      }
-
-    }).catch((err) => {
-      console.log(`password check ${err}`)
-      alertError(err.response.data.messge);
-      console.log("Login Error", err);
-    })
-
-
-
+      })
+      .catch((err) => {
+        console.log(`password check ${err}`);
+        alertError(err.response.data.messge);
+        console.log("Login Error", err);
+      });
 
     // console.log("Error", e);
     // alertError();
