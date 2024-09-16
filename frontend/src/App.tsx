@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-//import { SignUp } from "./routes/SignUp";
-//import { SignIn } from "./routes/SignIn";
+import Signup from "./routes/Signup";
+import SignIn from "./routes/SignIn";
 //import { Blog } from "./routes/Blogs";
 //import { Index } from "./routes/Index";
 //import { Home } from "./routes/Home";
@@ -11,15 +11,14 @@ import { lazy, Suspense } from "react";
 // import Test2 from "./routes/Test2";
 
 const Test = lazy(() => import("./routes/Test"));
-const SignUp = lazy(() => import("./routes/Signup"));
-const SignIn = lazy(() => import("./routes/SignIn"));
+// const SignUp = lazy(() => import("./routes/Signup"));
+// const SignIn = lazy(() => import("./routes/SignIn"));
 const Blog = lazy(() => import("./routes/Blogs"));
 const Home = lazy(() => import("./routes/Home"));
 const Index = lazy(() => import("./routes/Index"));
-const UploadBlogs = lazy(() => import("./routes/UploadBlogs"))
+const UploadBlogs = lazy(() => import("./routes/UploadBlogs"));
 
 const Fetch = lazy(() => import("./components/Fetch"));
-
 
 const routes = createBrowserRouter([
   {
@@ -78,7 +77,7 @@ const routes = createBrowserRouter([
         path: "signup",
         element: (
           <Suspense fallback={"loading..."}>
-            <SignUp />
+            <Signup />
           </Suspense>
         ),
       },
@@ -87,16 +86,20 @@ const routes = createBrowserRouter([
       {
         path: "test",
         element: <Test />,
-      }, {
+      },
+      {
         path: "upload_blogs",
-        element: <Suspense fallback={"Loading...."}><UploadBlogs /></Suspense>,
-      }
+        element: (
+          <Suspense fallback={"Loading...."}>
+            <UploadBlogs />
+          </Suspense>
+        ),
+      },
     ],
   },
 ]);
 function App() {
-  return <RouterProvider router={routes} />
-
+  return <RouterProvider router={routes} />;
 }
 
 export default App;

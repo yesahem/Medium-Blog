@@ -3,10 +3,18 @@ import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-
+import bcrypt from "bcryptjs-react";
 const alertSuccess = () =>
   toast.success("Signup Sucessfull, Redirecting to Login");
 const alertError = (str: string) => toast.error(str);
+
+async function hashUsersPassword(usersPassword: string) {
+  const hashedPassword = await bcrypt.hash(usersPassword, 10);
+  console.log(`hashedPassword is ${hashedPassword}`);
+
+  return hashedPassword.toString();
+}
+
 export default function SignUp() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -14,17 +22,18 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-  function signupHandler(e: SyntheticEvent) {
+  async function signupHandler(e: SyntheticEvent) {
     e.preventDefault();
     console.log("name: ", name);
     console.log("email: ", email);
     console.log("password: ", password);
+    const hashedPassword = await hashUsersPassword(password);
 
     axios
       .post("http://localhost:8787/api/v1/user/signup", {
         name: name,
         email: email,
-        password: password,
+        password: hashedPassword,
       })
       .then((res) => {
         // console.log("current");
