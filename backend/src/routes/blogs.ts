@@ -22,6 +22,8 @@ blogsRouter.use("/*", async (context, next) => {
   console.log("This is a middleware route");
   try {
     const authHeader = context.req.header("Authorization");
+    console.log("Auth Header", authHeader);
+    console.log(!authHeader);
     if (!authHeader) {
       context.status(401);
       return context.json({
@@ -34,7 +36,7 @@ blogsRouter.use("/*", async (context, next) => {
     if (!verification) {
       context.status(403);
       return context.json({
-        error: "Unauthorised",
+        error: "Unauthorised verification",
       });
     }
     // console.log("Verification is :", verification.name);
@@ -44,8 +46,10 @@ blogsRouter.use("/*", async (context, next) => {
     // console.log(jwt);
     await next();
   } catch (err) {
+    console.log("Error", err)
     return context.json({
-      error: "Unauthorised",
+      
+      error: "Unauthorised error",
     });
   }
 });

@@ -1,7 +1,7 @@
 import { Context, Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { decode, verify, sign } from "hono/jwt";
+import { decode, verify, sign, jwt } from "hono/jwt";
 import { log } from "console";
 import { z } from "zod";
 import {
@@ -29,6 +29,43 @@ const signupSchemaUsingZod = z.object({
   email: z.string().email(),
   password: z.string().min(8, "Password must contains at least 8 characters"),
 });
+
+userRouter.get("/getUserInfo", async (c)=>{
+  const auth = c.req.header("Authorization")!;
+  const token = auth.split("Bearer ")[1];
+  console.log("Token", token);
+  try{
+
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    console.log(`Token in getUserInfo ${token}`);
+  const validateToken = await verify(token, c.env.JWT_SECRET);
+  console.log(validateToken);
+  if (validateToken) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: validateToken.id,
+      },
+    });
+    console.log(user);
+    return c.json({user});
+  } else {
+    c.status(403);
+    return c.json({
+      message: "Invalid Token",
+    });
+  }
+}
+catch (e) {
+  return c.json({
+    message:"Something went wrong",
+    error: e
+
+  })
+}
+})
+
 
 userRouter.post("/signup", async (c) => {
   // To add logics to check if the dataBase have the user with the same email or not if not then create user if yes then return the error that user already exist
@@ -100,6 +137,7 @@ userRouter.post("/signin", async (c) => {
   // Add user logic to verify the user JWT and then send the login message
 
   const headers = c.req.header("Authorization");
+  let token;
   console.log(headers);
 
   try {
@@ -110,6 +148,8 @@ userRouter.post("/signin", async (c) => {
     const isCredsValid = signinSchemaUsingZod.parse(body);
 
     console.log(`signin ${isCredsValid} `);
+
+
 
     if (!isCredsValid) {
       c.status(411);
@@ -122,6 +162,17 @@ userRouter.post("/signin", async (c) => {
         email: body.email,
       },
     });
+    if(getUser){
+      const payload: {id:string} = {
+        id: getUser.id
+      }
+       token = await sign(payload, c.env.JWT_SECRET);
+      console.log(`inside the signin payload`, payload)
+      console.log("token", token);
+      }
+      console.log(`signin Route`);
+      
+    console.log("getuser,", getUser);
 
     // console.log(getUser);
     if (!getUser) {
@@ -130,8 +181,8 @@ userRouter.post("/signin", async (c) => {
         messge: "User Doesn't Exists",
       });
     } else {
-      console.log(getUser);
-      return c.json(getUser);
+      // console.log(getUser);
+      return c.json({getUser, token});
     }
   } catch (err) {
     // c.status(403)
