@@ -3,19 +3,29 @@ import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
+import bcrypt from "bcryptjs-react";
 
 const alertSuccess = () => toast.success("Login Sucess");
 const alertError = (str: string) => toast.error(`${str}`);
 
 const token = localStorage.getItem("jwt-token");
+let hashedPassword: string;
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  function signinHandler(e: SyntheticEvent) {
-    // e.preventDefault();
+
+  async function hashingpassword(password: string) {
+    hashedPassword = await bcrypt.hash(password, 0);
+    console.log(`hashedPassword in signin${hashedPassword}`);
+    return hashedPassword.toString();
+  }
+
+  async function signinHandler(e: SyntheticEvent) {
+    const hashedPassword = await hashingpassword(password);
+    //  e.preventDefault();
     console.log("email: ", email);
     console.log("password: ", password);
     console.log(`you are here `);
@@ -24,8 +34,8 @@ export default function SignIn() {
       .post(
         "http://localhost:8787/api/v1/user/signin",
         {
-          email: email,
-          password: password,
+          email,
+          password: hashedPassword,
         },
         {
           headers: {
@@ -37,9 +47,23 @@ export default function SignIn() {
         console.log(res);
 
         if (res.data.email === email) {
+          //console.log(`email:${email}`);
+
+          //console.log(`Password:${password}`);
+
+          //hashingpassword(password);
+
+          //console.log(`hashedPassword: ${hashedPassword} in signin route`);
+
+          //console.log(`responsepassword:${res.data.password}`);
+
+          //console.log(`responseDataEmail: ${res.data.email}`);
+
+          // console.log(`responseEmail: ${typeof res.data.password}`);
           if (res.data.password === password) {
             console.log("Login Response is :", res);
             alertSuccess();
+            localStorage.setItem("isLogin", "true");
             navigate("/blog");
           } else {
             alertError("Incorrect Password");

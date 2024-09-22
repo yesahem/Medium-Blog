@@ -8,12 +8,14 @@ const alertSuccess = () =>
   toast.success("Signup Sucessfull, Redirecting to Login");
 const alertError = (str: string) => toast.error(str);
 
+/*
 async function hashUsersPassword(usersPassword: string) {
-  const hashedPassword = await bcrypt.hash(usersPassword, 10);
+  const hashedPassword = await bcrypt.hash(usersPassword, 0);
   console.log(`hashedPassword is ${hashedPassword}`);
 
   return hashedPassword.toString();
 }
+*/
 
 export default function SignUp() {
   const [password, setPassword] = useState("");
@@ -27,13 +29,13 @@ export default function SignUp() {
     console.log("name: ", name);
     console.log("email: ", email);
     console.log("password: ", password);
-    const hashedPassword = await hashUsersPassword(password);
+    //    const hashedPassword = await hashUsersPassword(password);
 
     axios
       .post("http://localhost:8787/api/v1/user/signup", {
         name: name,
         email: email,
-        password: hashedPassword,
+        password: password,
       })
       .then((res) => {
         // console.log("current");
@@ -41,6 +43,7 @@ export default function SignUp() {
         console.log(res.data.err);
 
         localStorage.setItem(`jwt-token`, res.data.token);
+        localStorage.setItem("isLogin", "false");
 
         if (!res.data.err) {
           alertSuccess();
