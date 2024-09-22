@@ -81,7 +81,7 @@ const routes = createBrowserRouter([
         ),
       },
 
-      //  This route is to be removed
+      //  This route is to be removed after testing all routes
       {
         path: "test",
         element: <Test />,
