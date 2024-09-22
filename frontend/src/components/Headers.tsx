@@ -14,6 +14,8 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.setItem("isLogin", "false"); // Log out the user
+    localStorage.removeItem("jwt-token"); // Remove the JWT token from local storage
+    localStorage.removeItem("isLogin"); // Remove the isLogin flag from local storage
     navigate("/signin"); // Redirect to /signin after logging out
   };
 

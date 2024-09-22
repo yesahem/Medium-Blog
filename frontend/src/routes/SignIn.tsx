@@ -46,7 +46,7 @@ export default function SignIn() {
       .then((res) => {
         console.log(res);
 
-        if (res.data.email === email) {
+        if (res.data.getUser.email === email) {
           //console.log(`email:${email}`);
 
           //console.log(`Password:${password}`);
@@ -58,18 +58,20 @@ export default function SignIn() {
           //console.log(`responsepassword:${res.data.password}`);
 
           //console.log(`responseDataEmail: ${res.data.email}`);
-
+          
+           localStorage.setItem("isLogin", "false");
           // console.log(`responseEmail: ${typeof res.data.password}`);
-          if (res.data.password === password) {
+          if (res.data.getUser.password === password) {
             console.log("Login Response is :", res);
             alertSuccess();
+            localStorage.setItem(`jwt-token`, res.data.token);
             localStorage.setItem("isLogin", "true");
             navigate("/blog");
           } else {
             alertError("Incorrect Password");
           }
         } else {
-          throw new Error("Incorrect Email");
+          alertError("Incorrect Email");
         }
       })
       .catch((err) => {

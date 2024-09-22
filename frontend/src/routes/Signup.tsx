@@ -42,8 +42,8 @@ export default function SignUp() {
         console.log(`Response ${res}`);
         console.log(res.data.err);
 
-        localStorage.setItem(`jwt-token`, res.data.token);
-        localStorage.setItem("isLogin", "false");
+        // localStorage.setItem(`jwt-token`, res.data.token);
+        // localStorage.setItem("isLogin", "false");
 
         if (!res.data.err) {
           alertSuccess();
