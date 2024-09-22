@@ -6,9 +6,9 @@ import Index from "./routes/Index";
 import Home from "./routes/Home";
 import Test from "./routes/Test";
 import Fetch from "./components/Fetch";
-import { lazy, Suspense } from "react";
+// import { lazy, Suspense } from "react";
 import UploadBlogs from "./routes/UploadBlogs";
-import Test2 from "./routes/Test2";
+// import Test2 from "./routes/Test2";
 
 //const Test = lazy(() => import("./routes/Test"));
 // const SignUp = lazy(() => import("./routes/Signup"));
