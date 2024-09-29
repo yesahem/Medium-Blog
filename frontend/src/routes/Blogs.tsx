@@ -56,7 +56,7 @@ export default function Blog() {
       if (!token) return;
       
       try {
-        const response = await axios.get("http://localhost:8787/api/v1/user/getUserInfo", {
+        const response = await axios.get("https://backend.ahemraj82.workers.dev/api/v1/user/getUserInfo", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -93,7 +93,7 @@ export default function Blog() {
   useEffect(() => {
     console.log("Token inside no depArray", token);
     axios
-      .get(`http://localhost:8787/api/v1/blog/bulk`, {
+      .get(`https://backend.ahemraj82.workers.dev/api/v1/blog/bulk`, {
         headers: {
           //    "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -163,7 +163,7 @@ export default function Blog() {
                     {/* <p className="text-sm text-gray-500 mb-4">{post.date}</p> */}
                   </div>
                   <a
-                    href={`http://localhost:8787/api/v1/blog/get/${post.id}`}
+                    href={`https://backend.ahemraj82.workers.dev/api/v1/blog/get/${post.id}`}
                     className="inline-block text-blue-500 hover:underline"
                   >
                     Read More

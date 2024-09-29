@@ -32,7 +32,7 @@ export default function SignUp() {
     //    const hashedPassword = await hashUsersPassword(password);
 
     axios
-      .post("http://localhost:8787/api/v1/user/signup", {
+      .post("https://backend.ahemraj82.workers.dev/api/v1/user/signup", {
         name: name,
         email: email,
         password: password,
