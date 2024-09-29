@@ -4,7 +4,7 @@ export default function Fetch() {
 
   const { id } = useParams();
   console.log(id)
-  let blogData = ""
+  let blogData ;
   axios.get(`${id}`).then((data) => {
     blogData = data
   })

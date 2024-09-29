@@ -1,15 +1,15 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import bcrypt from "bcryptjs-react";
+// import bcrypt from "bcryptjs-react";
 
 const alertSuccess = () => toast.success("Login Sucess");
-const alertError = (str: string) => toast.error(`${str}`);
+const alertError = (str: string) => toast.error(str);
 
 const token = localStorage.getItem("jwt-token");
-let hashedPassword: string;
+// let hashedPassword: string;
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -17,15 +17,16 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
-  async function hashingpassword(password: string) {
-    hashedPassword = await bcrypt.hash(password, 0);
-    console.log(`hashedPassword in signin${hashedPassword}`);
-    return hashedPassword.toString();
-  }
+  // async function hashingpassword(password: string) {
+  //   hashedPassword = await bcrypt.hash(password, 0);
+  //   console.log(`hashedPassword in signin${hashedPassword}`);
+  //   return hashedPassword.toString();
+  // }
 
   async function signinHandler(e: SyntheticEvent) {
-    const hashedPassword = await hashingpassword(password);
+    // const hashedPassword = await hashingpassword(password);
     //  e.preventDefault();
+    console.log(e);
     console.log("email: ", email);
     console.log("password: ", password);
     console.log(`you are here `);
@@ -35,13 +36,13 @@ export default function SignIn() {
         "http://localhost:8787/api/v1/user/signin",
         {
           email,
-          password: hashedPassword,
+          password,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       )
       .then((res) => {
         console.log(res);
@@ -58,8 +59,8 @@ export default function SignIn() {
           //console.log(`responsepassword:${res.data.password}`);
 
           //console.log(`responseDataEmail: ${res.data.email}`);
-          
-           localStorage.setItem("isLogin", "false");
+
+          localStorage.setItem("isLogin", "false");
           // console.log(`responseEmail: ${typeof res.data.password}`);
           if (res.data.getUser.password === password) {
             console.log("Login Response is :", res);
@@ -76,7 +77,14 @@ export default function SignIn() {
       })
       .catch((err) => {
         console.log(`password check ${err}`);
-        alertError(err.response.data.messge);
+
+        console.log(err);
+        if (err.response.data.messge) {
+          alertError(err.response.data.messge);
+        } else {
+          alertError(err);
+        }
+
         console.log("Login Error", err);
       });
 

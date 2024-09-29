@@ -3,7 +3,7 @@ import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import bcrypt from "bcryptjs-react";
+
 const alertSuccess = () =>
   toast.success("Signup Sucessfull, Redirecting to Login");
 const alertError = (str: string) => toast.error(str);

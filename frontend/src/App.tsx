@@ -29,7 +29,7 @@ const routes = createBrowserRouter([
       //</Suspense>
     ),
     children: [
-      /* {
+       {
         path: "",
         element: (
           //  <Suspense fallback={"loading..."}>
@@ -37,9 +37,9 @@ const routes = createBrowserRouter([
           <Home />
           //</Suspense>
         ),
-      },*/
+      },
       {
-        path: "home" || "",
+        path: "home",
         element: (
           // <Suspense fallback={"loading..."}>
           <Home />

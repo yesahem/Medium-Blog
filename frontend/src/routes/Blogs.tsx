@@ -4,7 +4,8 @@ import { ColorRing } from "react-loader-spinner";
 import { useEffect,  useState } from "react";
 import axios from "axios";
 import Header from "../components/Headers";
-import { set } from "zod";
+import { toast } from "react-custom-alert";
+import 'react-custom-alert/dist/index.css';
 // import Header2 from "../components/Headers2";
 
 interface posts {
@@ -19,7 +20,7 @@ console.log(`this is your token ${token}`);
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
-  const [description, setDescription] = useState([]);
+  const [description2, setDescription] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [userName, setUserName] = useState("")
   const [token, setToken] = useState(localStorage.getItem("jwt-token") || undefined || null)
@@ -66,6 +67,7 @@ export default function Blog() {
         setUserName(response.data.user.name);
       } catch (error) {
         // console.log("Error fetching user info", error);
+        toast.error("Error fetching user info");
       }
     };
   
@@ -107,9 +109,11 @@ export default function Blog() {
         }
         setPosts(res.data.posts);
         const description = res.data.posts.map((post: { title: String }) => {
+
           setDescription(post.title.substring(0, 5));
         });
         console.log("description is", description);
+        console.log("description2 is", description2);
       })
       .catch((err) => {
         console.log("Error in get axios");
@@ -145,9 +149,9 @@ export default function Blog() {
           {/* Posts List */}
           <div className="grid gap-6 lg:grid-cols-2">
             {posts.length > 0 ? (
-              posts.map((post: posts) => (
+              posts.map((post: posts, index) => (
                 <div
-                  key={post.id}
+                  key={index}
                   className="bg-white p-6 shadow rounded-lg border flex flex-col justify-between"
                 >
                   <div>
@@ -156,7 +160,7 @@ export default function Blog() {
                     </h2>
                     <p className="text-gray-600 mb-4">{post.content}</p>
 
-                    <p className="text-sm text-gray-500 mb-4">{post.date}</p>
+                    {/* <p className="text-sm text-gray-500 mb-4">{post.date}</p> */}
                   </div>
                   <a
                     href={`http://localhost:8787/api/v1/blog/get/${post.id}`}
@@ -184,6 +188,7 @@ export default function Blog() {
         </section>
       </main>
     </div>
+    
     </div>
   );
 }

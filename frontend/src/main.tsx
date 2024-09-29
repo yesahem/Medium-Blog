@@ -8,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <>
       <App />
-      <ToastContainer floatingTime={10000} />
+      <ToastContainer floatingTime={3500} />
     </>
   </React.StrictMode>
 );

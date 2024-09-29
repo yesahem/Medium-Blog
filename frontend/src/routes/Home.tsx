@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import Header2 from "../components/Headers2";
+
 import Header from "../components/Headers";
 
 export default function Home() {
