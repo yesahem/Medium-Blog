@@ -1,8 +1,10 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
+import { z } from "zod";
+
 // import bcrypt from "bcryptjs-react";
 
 const alertSuccess = () => toast.success("Login Sucess");
@@ -30,10 +32,10 @@ export default function SignIn() {
     console.log("email: ", email);
     console.log("password: ", password);
     console.log(`you are here `);
-
+    
     axios
       .post(
-        "https://backend.ahemraj82.workers.dev/api/v1/user/signin",
+        "http://localhost:8787/api/v1/user/signin",
         {
           email,
           password,
@@ -45,10 +47,10 @@ export default function SignIn() {
         }
       )
       .then((res) => {
-        console.log(res);
-
-        if (res.data.getUser.email === email) {
-          //console.log(`email:${email}`);
+        console.log("pinki", res);
+        
+        if (res.data.getUser.email === email ) {
+          console.log(`email:${email}`);
 
           //console.log(`Password:${password}`);
 
@@ -76,14 +78,20 @@ export default function SignIn() {
         }
       })
       .catch((err) => {
+        console.log(err)
         console.log(`password check ${err}`);
-
-        console.log(err);
-        if (err.response.data.messge) {
+        console.log("error type ", typeof err)
+        // alertError("Invalid Credentials");
+        // console.log(err);
+        if ( err.response && err.response.data &&err.response.data.messge) {
           alertError(err.response.data.messge);
-        } else {
-          alertError(err);
+        } else if (err) {
+          console.log("i have error ", err);
+          alertError("Invalid Credentials")
+        }else{
+          
         }
+        // alertError("Invalid Credentials");
 
         console.log("Login Error", err);
       });

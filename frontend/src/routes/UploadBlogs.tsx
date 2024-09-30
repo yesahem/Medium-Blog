@@ -1,3 +1,4 @@
+import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 // import { Link } from "react-router-dom";
 
@@ -7,10 +8,19 @@ export default function UploadBlogs() {
 
   function blogUploadHandler(e: SyntheticEvent) {
     // send the Title content to the backend and store in Db 
+
     e.preventDefault()
     console.log("I am a blog upload handler ")
     console.log(`Title : ${title}`);
     console.log(`Content : ${content}`);
+    axios.post("https://backend.ahemraj82.workers.dev/api/v1/blog/", {
+
+        title: title,
+        content: content,
+        published: true,
+    }).then((res) => {
+      console.log("res after blog update is ", res)
+    })
 
 
   }
