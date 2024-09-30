@@ -3,7 +3,7 @@ import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import { z } from "zod";
+
 
 // import bcrypt from "bcryptjs-react";
 
