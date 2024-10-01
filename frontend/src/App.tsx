@@ -1,3 +1,4 @@
+// src/App.tsx
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./routes/Signup";
 import SignIn from "./routes/SignIn";
@@ -6,99 +7,59 @@ import Index from "./routes/Index";
 import Home from "./routes/Home";
 import Test from "./routes/Test";
 import Fetch from "./components/Fetch";
-// import { lazy, Suspense } from "react";
 import UploadBlogs from "./routes/UploadBlogs";
-// import Test2 from "./routes/Test2";
-
-//const Test = lazy(() => import("./routes/Test"));
-// const SignUp = lazy(() => import("./routes/Signup"));
-// const SignIn = lazy(() => import("./routes/SignIn"));
-// const Blog = lazy(() => import("./routes/Blogs"));
-// const Home = lazy(() => import("./routes/Home"));
-// const Index = lazy(() => import("./routes/Index"));
-// const UploadBlogs = lazy(() => import("./routes/UploadBlogs"));
-
-// const Fetch = lazy(() => import("./components/Fetch"));
 
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: (
-      // <Suspense fallback={"Loading..."}>
-      <Index />
-      //</Suspense>
-    ),
+    element: <Index />,
     children: [
-       {
-        path: "",
-        element: (
-          //  <Suspense fallback={"loading..."}>
-
-          <Home />
-          //</Suspense>
-        ),
-      },
-      {
-        path: "home",
-        element: (
-          // <Suspense fallback={"loading..."}>
-          <Home />
-          // </Suspense>
-        ),
-      },
+      { path: "", element: <Home /> },
+      { path: "home", element: <Home /> },
       {
         path: "blog",
-        element: (
-          //<Suspense fallback={"loading..."}>
-          <Blog />
-          //</Suspense>
-        ),
+        element: <Blog />,
         children: [
-          {
-            path: ":id",
-            element: (
-              //  <Suspense fallback={"loading...."}>
-              <Fetch />
-              // </Suspense>
-            ),
-          },
+          { path: ":id", element: <Fetch /> },
         ],
       },
-      {
-        path: "signin",
-        element: (
-          //<Suspense fallback={"loading..."}>
-          <SignIn />
-          //</Suspense>
-        ),
-      },
-      {
-        path: "signup",
-        element: (
-          //<Suspense fallback={"loading..."}>
-          <Signup />
-          //</Suspense>
-        ),
-      },
-
-      //  This route is to be removed after testing all routes
-      {
-        path: "test",
-        element: <Test />,
-      },
-      {
-        path: "upload_blogs",
-        element: (
-          //<Suspense fallback={"Loading...."}>
-          <UploadBlogs />
-          //</Suspense>
-        ),
-      },
+      { path: "signin", element: <SignIn /> },
+      { path: "signup", element: <Signup /> },
+      { path: "test", element: <Test /> },
+      { path: "upload_blogs", element: <UploadBlogs /> },
     ],
   },
 ]);
+
+const ToggleDarkModeButton = () => {
+  const toggleDarkMode = () => {
+    document.documentElement.classList.toggle('dark');
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    localStorage.setItem('dark-mode', isDarkMode.toString());
+  };
+
+  return (
+    <button
+      onClick={toggleDarkMode}
+      className="p-2 bg-gray-300 rounded dark:bg-gray-700 dark:text-white"
+    >
+      Toggle Dark Mode
+    </button>
+  );
+};
+
 function App() {
-  return <RouterProvider router={routes} />;
+  // Check local storage for dark mode preference
+  if (localStorage.getItem('dark-mode') === 'true') {
+    document.documentElement.classList.add('dark');
+  }
+
+  return (
+    <>
+      <ToggleDarkModeButton />
+      <RouterProvider router={routes} />
+    </>
+  );
 }
 
 export default App;

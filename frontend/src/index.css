@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
+
+/* Custom styles */
+body {
+  padding: 25px;
+  background-color: white; /* Default light mode background */
+  color: black;            /* Default light mode text color */
+  font-size: 25px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+/* Dark mode styles */
+.dark {
+  background-color: black; /* Dark mode background */
+  color: white;            /* Dark mode text color */
+}
+
 @tailwind utilities;
