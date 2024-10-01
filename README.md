@@ -7,7 +7,7 @@
 
 - Fork the repo
 - Clone the repo
-- Create a branch using `git checkout -b feature/branch-name`
+- Create a branch using `git checkout -b issue/#issue-number`
 - Make the necessary changes
 - Commit your changes using `git commit -m 'commit message'`
 - Push to the branch using `git push origin issue/#issue-number `
