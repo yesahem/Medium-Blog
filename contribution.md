@@ -1,129 +1,72 @@
-# Contributor's Guide
+# Contributing to Medium-Blog
 
-'HOW TO CONTRIBUTE TO OPEN SOURCE' accepts PR's (pull requests) from **newbies**
-only. This is to help **newbies** get familiar with the contribution processes.
+We're excited that you're interested in contributing to Medium-Blog. This document outlines the process for contributing to our project and provides some guidelines to ensure a smooth collaboration.
 
-Issues can be submitted by anyone - either seasoned developers or newbies.
+## Table of Contents
 
-**Contents**
+1. [Project Structure](#project-structure)
+2. [Getting Started](#getting-started)
+3. [Raising Issues](#raising-issues)
+4. [Submitting Pull Requests](#submitting-pull-requests)
+5. [Code Style and Standards](#code-style-and-standards)
+6. [Security Considerations](#security-considerations)
 
-- [Choosing an Issue](#choosing-an-issue)
-- [Getting Started](#getting-started)
-- [Submitting a Pull Request](#submitting-a-pull-request)
+## Project Structure
 
-## Choosing an Issue
+Our project is structured as follows:
 
-Before getting started and setup with contributing, you'll want to look at and choose an issue to work on. Here is a basic workflow you want to work from:
+- Frontend: Built with Vite and React
+- Backend: Built with Hono.js
 
-1. Search through issues
-2. Find issue you want to work on
-3. Check if someone else has already worked on and made a pull request on said issue
-4. (Optional) Double check pull requests for someone who has worked on the pull request
+Please familiarize yourself with these technologies before contributing.
 
-If you have gotten that far, then you can go ahead and work on the issue. Below are more detailed instructions based on the basic workflow above.
+## Getting Started
 
-You can find open issue [here](https://github.com/yesahem/Medium-Blog/issues).
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+3. Install the necessary dependencies for both frontend and backend.
+4. Create a new branch for your feature or bug fix.
 
-Once you've found an issue you want to work on, take a look at the issue to see if anyone else has made a pull request for this issue yet.
+## Raising Issues
 
-You can tell if someone has correctly referenced and worked on an issue if in the issue you find some text saying, the following:
+When raising an issue, please follow these guidelines:
 
->  This was referenced on ____
+1. Check if the issue already exists in the project's issue tracker.
+2. If it doesn't exist, create a new issue with a clear, descriptive title.
+3. Provide a detailed description of the issue, including:
+   - Steps to reproduce
+   - Expected behavior
+   - Actual behavior
+   - Screenshots or error messages (if applicable)
+4. Label the issue appropriately (e.g., bug, enhancement, documentation).
 
-where that `____` is the date and below it is the pull request of another individual working on that issue. [Here](https://github.com/yesahem/Medium-Blog/issues/13) is an example of what this looks like.
+## Submitting Pull Requests
 
-To be extra sure no one has worked on it, you can [take a look at the pull requests](https://github.com/yesahem/Medium-Blog/pulls) as well to see if anyone has made a similar pull request.
+To submit a pull request (PR):
 
-If you've gotten this far, then you can continue on with the next section on "Getting Started" to working on your first pull request and contribution to our repository.
+1. Write clear, concise commit messages.
+2. Include tests for new features or bug fixes.
+3. Update documentation if necessary.
+4. Create a pull request with a clear title and description.
+5. Reference any related issues in your PR description.
 
-### Getting Started
+## Code Style and Standards
 
-1.  If you are new to Git and GitHub, it is advisable that you go through
-    [GitHub For Beginners](http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1/)
-    **before** moving to Step 2.
+- Follow the existing code style in the project.
+- Use meaningful variable and function names.
+- Write clear comments for complex logic.
+- Ensure your code is properly formatted.
 
-2.  Fork the project on GitHub.
-    [Help Guide to Fork a Repository](https://help.github.com/en/articles/fork-a-repo/).
+## Security Considerations
 
-    ![Illustration for How to Fork a Repository](https://hisham.hm/img/posts/github-fork.png)
+When contributing, please keep the following security considerations in mind:
 
-3.  Clone the project.
-    [Help Guide to Clone a Repository](https://help.github.com/en/articles/cloning-a-repository)
+1. Never commit sensitive information (e.g., API keys, passwords) to the repository.
+2. Use environment variables for configuration settings.
+3. Validate and sanitize user inputs to prevent injection attacks.
+4. Follow best practices for authentication and authorization.
+5. Keep dependencies up to date and regularly check for vulnerabilities.
 
-4.  Create a branch specific to the issue you are working on.
+For any security-related issues, please report them privately to the project maintainers.
 
-    ```shell
-    git checkout -b update-readme-file
-    ```
-
-    For clarity, name
-    your branch `update-xxx` or `fix-xxx`. The `xxx` is a short
-    description of the changes you're making. Examples include `update-readme` or
-    `fix-typo-on-contribution-md`.
-
-5.  Open up the project in your favorite text editor, select the file you want
-    to contribute to, and make your changes.
-
-    If you are making changes to the `README.md` file, you would need to have
-    Markdown knowledge. Visit
-    [here to read about GitHub Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
-    and
-    [here to practice](http://www.markdowntutorial.com/).
-
-    *   If you are adding a new project/organization to the README, make sure
-        it's listed in alphabetical order.
-    *   If you are adding a new organization, make sure you add an organization
-        label to the organization name. This would help distinguish projects
-        from organizations.
-
-6.  Add your modified
-    files to Git, [How to Add, Commit, Push, and Go](http://readwrite.com/2013/10/02/github-for-beginners-part-2/).
-
-    ```shell
-    git add path/to/filename.ext
-    ```
-
-    You can also add all unstaged files using:
-
-    ```shell
-    git add .
-    ```
-
-    **Note:** using a `git add .` will automatically add all files. You can do a
-    `git status` to see your changes, but do it **before** `git add`.
-
-6.  Commit your changes using a descriptive commit message.
-
-    ```shell
-    git commit -m "Brief Description of Commit"
-    ```
-
-7.  Push your commits to your GitHub Fork:
-
-    ```shell
-    git push -u origin branch-name
-    ```
-
-8.  Submit a pull request.
-
-    Within GitHub, visit this main repository and you should see a banner
-    suggesting that you make a pull request. While you're writing up the pull
-    request, you can add `Closes #XXX` in the message body where `#XXX` is the
-    issue you're fixing. Therefore, an example would be `Closes #42` would close issue
-    `#42`.
-
-### Submitting a Pull Request
-
-[What is a Pull Request?](https://yangsu.github.io/pull-request-tutorial/)
-
-If you decide to fix an issue, it's advisable to check the comment thread to see if there's somebody already working on a fix. If no one is working on it, kindly leave a comment stating that you intend to work on it. By doing that,
-other people don't accidentally duplicate your effort.
-
-In a situation where somebody decides to fix an issue but doesn't follow up
-for a particular period of time, say 2-3 weeks, it's acceptable to still pick
-up the issue but make sure that you leave a comment.
-
-*Note*: Every open-source project has a **CONTRIBUTING.md** file, please make
-sure to read this before you open up a pull request; otherwise, it may be
-rejected. However, if you do not see any CONTRIBUTING.md file, you can send a
-pull request but do it in a descriptive manner.
+Thank you for contributing to Medium-Blog Your efforts help make this project better for everyone.
