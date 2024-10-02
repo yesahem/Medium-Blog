@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import DarkModeToggle from "./DarkModeToggle"; // Import the DarkModeToggle component
 
 export default function Header() {
   const isLoggedIn = localStorage.getItem("isLogin") === "true"; // Check if logged in
@@ -70,9 +69,6 @@ export default function Header() {
           </>
         )}
       </nav>
-
-      {/* Dark Mode Toggle Button */}
-      <DarkModeToggle />
     </header>
   );
 }

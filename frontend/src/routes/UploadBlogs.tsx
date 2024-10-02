@@ -1,42 +1,36 @@
 import axios from "axios";
-import { SyntheticEvent, useState, useEffect } from "react";
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import { SyntheticEvent, useState } from "react";
+// import { Link } from "react-router-dom";
 
 export default function UploadBlogs() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
-    }
-  }, []);
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
 
   function blogUploadHandler(e: SyntheticEvent) {
     // send the Title content to the backend and store in Db 
-    e.preventDefault();
-    console.log("I am a blog upload handler ");
-    console.log(`Title: ${title}`);
-    console.log(`Content: ${content}`);
-    axios.post("https://backend.ahemraj82.workers.dev/api/v1/blog/", {
-      title: title,
-      content: content,
-      published: true,
-    }).then((res) => {
-      console.log("res after blog update is ", res);
-    });
-  }
 
+    e.preventDefault()
+    console.log("I am a blog upload handler ")
+    console.log(`Title : ${title}`);
+    console.log(`Content : ${content}`);
+    axios.post("https://backend.ahemraj82.workers.dev/api/v1/blog/", {
+
+        title: title,
+        content: content,
+        published: true,
+    }).then((res) => {
+      console.log("res after blog update is ", res)
+    })
+
+
+  }
   return (
-    <div className={`flex flex-col min-h-screen ${isDarkMode ? 'dark' : ''}`}>
-      <div className="absolute top-4 right-4">
-        <DarkModeToggle />
-      </div>
+
+
+    <div className="flex flex-col min-h-screen">
       <div className="flex-1 flex justify-center items-center">
         <div className="w-full py-12 md:py-24 lg:py-32">
-          <div className="mx-auto px-4 md:px-6">
+          <div className=" mx-auto px-4 md:px-6">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-center tracking-tight sm:text-5xl xl:text-6xl">
@@ -48,7 +42,7 @@ export default function UploadBlogs() {
                   </p>
                 </div>
               </div>
-              <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg mx-auto border-2 border-green-400">
+              <div className="w-full max-w-md p-6 bg-white shadow rounded-lg mx-auto border -2 border-green-400 ">
                 <form className="space-y-4">
                   <div className="space-y-2">
                     <div className="block text-sm font-medium">
@@ -63,7 +57,10 @@ export default function UploadBlogs() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <div className="block text-sm font-medium">
+                    <div
+
+                      className="block text-sm font-medium"
+                    >
                       Your Content Here
                     </div>
                     <textarea
@@ -84,10 +81,18 @@ export default function UploadBlogs() {
                   </div>
                 </form>
               </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
+
+
+
+
+
+
+
+  )
 }
