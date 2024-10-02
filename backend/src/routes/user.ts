@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { decode, verify, sign, jwt } from "hono/jwt";
 import { log } from "console";
-import { string, z } from "zod";
+import {  z } from "zod";
 import {
   SignupSchema,
   SigninSchema,
@@ -141,6 +141,7 @@ userRouter.post("/signin", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const body: SigninSchema = await c.req.json();
+    
     const isCredsValid = signinSchemaUsingZod.parse(body);
 
     console.log(`signin ${isCredsValid} `);

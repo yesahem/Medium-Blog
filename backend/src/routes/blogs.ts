@@ -57,7 +57,12 @@ blogsRouter.use("/*", async (context, next) => {
 
 // Routes to initialise a blog post
 blogsRouter.post("/", async (c) => {
-  const userid = c.var.userid;
+  const userid = localStorage.getItem("jwt-token") ;
+  const verification = await decode(userid || "");
+  console.log("verification", verification);
+  console.log("userid", userid);
+  
+  // const userid = c.var.userid;
 
   // const prisma = new PrismaClient({
   //   datasources:{
@@ -110,6 +115,7 @@ blogsRouter.post("/", async (c) => {
 // Route to update blogs
 blogsRouter.put("/", async (c) => {
   const userid = c.var.userid;
+  console.log("userid", userid);
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
