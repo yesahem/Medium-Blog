@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import 'react-custom-alert/dist/index.css';
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+// import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 interface posts {
   id: String;
