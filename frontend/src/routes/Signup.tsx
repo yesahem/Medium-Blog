@@ -1,4 +1,5 @@
 import axios from "axios";
+import bcrypt from "bcrypt"
 import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,25 +28,18 @@ export default function SignUp() {
 
   async function signupHandler(e: SyntheticEvent) {
     e.preventDefault();
-    console.log("name: ", name);
-    console.log("email: ", email);
-    console.log("password: ", password);
-    //    const hashedPassword = await hashUsersPassword(password);
-
+    
+    // Hashing the password using bcrypt 
+    const hashedPassword = await bcrypt.hash(password, 4);
+    console.log(`Hashed Password: ${hashedPassword}`);
+  
     axios
       .post("https://backend.ahemraj82.workers.dev/api/v1/user/signup", {
         name: name,
         email: email,
-        password: password,
+        password: hashedPassword,
       })
       .then((res) => {
-        // console.log("current");
-        console.log(`Response ${res}`);
-        console.log(res.data.err);
-
-        // localStorage.setItem("jwt-token", res.data.token);
-        // localStorage.setItem("isLogin", "false");
-
         if (!res.data.err) {
           alertSuccess();
           setTimeout(() => {

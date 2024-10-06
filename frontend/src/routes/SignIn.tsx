@@ -1,4 +1,5 @@
 import axios from "axios";
+import bcrypt from "bcrypt";
 import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,10 +19,7 @@ export default function SignIn() {
 
   async function signinHandler(e: SyntheticEvent) {
     e.preventDefault();
-    console.log("email: ", email);
-    console.log("password: ", password);
-    console.log("you are here");
-
+    
     axios
       .post(
         "https://backend.ahemraj82.workers.dev/api/v1/user/signin",
@@ -35,40 +33,28 @@ export default function SignIn() {
           },
         }
       )
-      .then((res) => {
-        console.log("pinki", res);
-
-        if (res.data.getUser.email === email) {
-          console.log(`email: ${email}`);
-
-          localStorage.setItem("isLogin", "false");
-          if (res.data.getUser.password === password) {
-            console.log("Login Response is:", res);
-            alertSuccess();
-            localStorage.setItem("jwt-token", res.data.token);
-            localStorage.setItem("isLogin", "true");
-            navigate("/blog");
-          } else {
-            alertError("Incorrect Password");
-          }
+      .then(async (res) => {
+        const hashedPasswordFromDB = res.data.getUser.password;
+  
+        // Comparing the entered password with the hashed password 
+        const isPasswordMatch = await bcrypt.compare(password, hashedPasswordFromDB);
+        
+        if (res.data.getUser.email === email && isPasswordMatch) {
+          alertSuccess();
+          localStorage.setItem("jwt-token", res.data.token);
+          localStorage.setItem("isLogin", "true");
+          navigate("/blog");
         } else {
-          alertError("Incorrect Email");
+          alertError("Incorrect Email or Password");
         }
       })
       .catch((err) => {
-        console.log(err);
-        console.log(`password check ${err}`);
-        console.log("error type ", typeof err);
         if (err.response && err.response.data && err.response.data.message) {
           alertError(err.response.data.message);
         } else {
           alertError("Invalid Credentials");
         }
-        console.log("Login Error", err);
       });
-
-    console.log("token: ", token);
-    console.log("hii there");
   }
 
   return (
