@@ -20,5 +20,10 @@ const app = new Hono<{
 
 app.route('/api/v1/blog/', blogsRouter)
 app.route( "/api/v1/user/", userRouter)
+app.get("/health",(context)=>{
+  return context.json({
+    "Message":"okay"
+  })
+})
 
 export default app;

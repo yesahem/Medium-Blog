@@ -2,7 +2,11 @@
   "name": "medium-backend",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "start": "wrangler dev index.js --local=true",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "postinstall": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "dev:docker": "npm run prisma:migrate && npm run dev"
   },
   "dependencies": {
     "@prisma/client": "5.18.0",
