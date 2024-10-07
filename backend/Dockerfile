@@ -1,10 +1,8 @@
-FROM node:22
+FROM node:20-alpine
 
-RUN apt-get -qq update && \
-    apt-get install -qqy --no-install-recommends \
-        ca-certificates \
-        libc++-dev &&  \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache \
+    ca-certificates \
+    libc-dev
 
 WORKDIR /app/backend
 
