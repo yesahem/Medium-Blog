@@ -2,6 +2,25 @@
 
 > I am Trying to implement a medium like blogging website a basic varient of medium
 
+## Installation
+
+###  Docker
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yesahem/Medium-Blog.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd Medium-Blog
+   ```
+
+3. Run the following command to start the application:
+   ```bash
+   docker compose up -d   
+   ```
+
 
 ## For contribution
 
@@ -16,3 +35,4 @@
 (Please link the issue number in  the pull request)
 
 Please try to add a small video or screenshot to show the functionality of the website.
+
