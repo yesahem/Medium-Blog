@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres 
+    ports:
+      - "5432:5432"
+    volumes:
+     - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend: 
+    container_name: backend
+    build: 
+      context: ./backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/mydb
+      - JWT_SECRET=your-secret
+    ports:
+      - "8787:8787"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules
+
+  frontend:
+    container_name: frontend
+    build: 
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    
+volumes:
+  postgres-data:
