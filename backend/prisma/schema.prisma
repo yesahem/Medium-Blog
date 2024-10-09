@@ -5,12 +5,13 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
@@ -26,6 +27,7 @@ model Post {
   title     String
   content   String
   published Boolean @default(false)
-  author    User   @relation(fields: [authorId], references: [id])
+  author    User    @relation(fields: [authorId], references: [id])
   authorId  String
+  createdAt DateTime @default(now())
 }
