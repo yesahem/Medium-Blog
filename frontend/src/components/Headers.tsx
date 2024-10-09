@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import DarkModeToggle from './DarkModeToggle'; // Import the DarkModeToggle component
+import DarkModeToggle from "./DarkModeToggle"; // Import the DarkModeToggle component
 
 export default function Header() {
   const isLoggedIn = localStorage.getItem("isLogin") === "true"; // Check if logged in
@@ -21,7 +21,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gray-100 px-4 lg:px-6 h-14 flex items-center border-b">
+    <header className="bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 h-14 flex items-center border-b">
       {/* Logo/Icon with conditional navigation */}
       <div
         onClick={handleIconClick}
@@ -36,7 +36,7 @@ export default function Header() {
       </div>
 
       {/* Conditional navigation links based on login status */}
-      <nav className="ml-auto flex gap-4 sm:gap-6">
+      <nav className="ml-auto flex gap-4 sm:gap-6 dark:text-white">
         {isLoggedIn ? (
           <>
             {/* Links shown when user is logged in */}
@@ -70,7 +70,7 @@ export default function Header() {
           </>
         )}
       </nav>
-      
+
       {/* Dark Mode Toggle */}
       <DarkModeToggle />
     </header>

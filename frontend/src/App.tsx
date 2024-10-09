@@ -8,6 +8,7 @@ import Test from "./routes/Test";
 import Fetch from "./components/Fetch";
 // import { lazy, Suspense } from "react";
 import UploadBlogs from "./routes/UploadBlogs";
+import BlogView from "./routes/BlogView";
 // import Test2 from "./routes/Test2";
 
 //const Test = lazy(() => import("./routes/Test"));
@@ -87,7 +88,11 @@ const routes = createBrowserRouter([
         element: <Test />,
       },
       {
-        path: "upload_blogs",
+        path: "view-blog/:id",
+        element: <BlogView />
+      },
+      {
+        path: "upload-blogs",
         element: (
           //<Suspense fallback={"Loading...."}>
           <UploadBlogs />
