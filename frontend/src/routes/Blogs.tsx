@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
-import 'react-custom-alert/dist/index.css';
+import "react-custom-alert/dist/index.css";
+import { BLOG_API_ENDPOINT_LOCAL, USER_API_ENDPOINT_LOCAL } from "../utils/env";
 // import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 interface posts {
-  id: String;
-  title: String;
-  content: String;
-  published: Boolean;
-  authorId: String;
+  id: string;
+  title: string;
+  content: string;
+  published: boolean;
+  authorId: string;
 }
 
 const token = localStorage.getItem("jwt-token");
@@ -23,18 +24,23 @@ export default function Blog() {
   const [description2, setDescription] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [userName, setUserName] = useState("");
-  const [token, setToken] = useState(localStorage.getItem("jwt-token") || undefined || null);
+  const [token, setToken] = useState(
+    localStorage.getItem("jwt-token") || undefined || null
+  );
 
   // Function to fetch user's Name information based on JWT token
   const fetchUserInfo = async (token: string | null) => {
     if (!token) return;
 
     try {
-      const response = await axios.get("https://backend.ahemraj82.workers.dev/api/v1/user/getUserInfo", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${USER_API_ENDPOINT_LOCAL}/getUserInfo`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("Response", response);
       console.log("Setting name", response.data.user.name);
       setUserName(response.data.user.name);
@@ -49,7 +55,7 @@ export default function Blog() {
       const newToken = localStorage.getItem("jwt-token");
       if (newToken !== token) {
         setToken(newToken);
-        fetchUserInfo(newToken);  // Fetch new user info when token changes
+        fetchUserInfo(newToken); // Fetch new user info when token changes
       }
     };
     window.addEventListener("storage", handleStorageChange);
@@ -62,7 +68,7 @@ export default function Blog() {
 
   useEffect(() => {
     axios
-      .get("https://backend.ahemraj82.workers.dev/api/v1/blog/bulk", {
+      .get(`${BLOG_API_ENDPOINT_LOCAL}/bulk`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +81,7 @@ export default function Blog() {
           setPosts([]);
         }
         setPosts(res.data.posts);
-        const description = res.data.posts.map((post: { title: String }) => {
+        const description = res.data.posts.map((post: { title: string }) => {
           setDescription(post.title.substring(0, 5));
         });
         console.log("description is", description);
@@ -85,23 +91,36 @@ export default function Blog() {
         console.log("Error in get axios");
         console.log(err);
       });
-  }, []);
+  }, [description2, token]);
+
+  const truncateContent = (content: string, length: number) => {
+    if (content.length <= length) return content;
+    return content.substring(0, length) + "...";
+  };
 
   return (
     <div>
       <Header />
-      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900"> {/* Added dark mode class */}
+      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+        {" "}
+        {/* Added dark mode class */}
         <main className="flex-1 flex flex-col items-center py-8">
           <section className="w-full max-w-5xl">
             {/* User Info Section */}
             <div className="flex justify-between items-center mb-8 p-6 rounded-lg">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome back {userName}</h1> {/* Added dark mode class */}
-                <p className="text-gray-600 dark:text-gray-300">Here are your blog posts:</p> {/* Added dark mode class */}
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                  Welcome Back {userName.charAt(0).toUpperCase() + userName.slice(1)}
+                </h1>
+                {/* Added dark mode class */}
+                <p className="text-gray-600 dark:text-gray-300">
+                  Here are your blog posts:
+                </p>
+                {/* Added dark mode class */}
               </div>
               <div>
                 <Link
-                  to="/upload_blogs"
+                  to="/upload-blogs"
                   className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
                 >
                   Create New Post
@@ -115,21 +134,31 @@ export default function Blog() {
                 posts.map((post: posts, index) => (
                   <div
                     key={index}
-                    className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex flex-col justify-between"> {/* Added dark mode class */}
+                    className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex flex-col justify-between"
+                  >
+                    {" "}
+                    {/* Added dark mode class */}
                     <div>
-                      <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{post.title}</h2> {/* Added dark mode class */}
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">{post.content}</p> {/* Added dark mode class */}
+                      <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                        {post.title}
+                      </h2>
+                      {/* Added dark mode class */}
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        {truncateContent(post.content, 100)}
+                      </p>
+                      {/* Added dark mode class */}
                     </div>
-                    <a
-                      href={`https://backend.ahemraj82.workers.dev/api/v1/blog/get/${post.id}`}
+                    <Link
+                      to={`/view-blog/${post.id}`}
                       className="inline-block text-blue-500 hover:underline"
                     >
                       Read More
-                    </a>
+                    </Link>
                   </div>
                 ))
               ) : showMessage ? (
-                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex justify-between"> {/* Added dark mode class */}
+                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex justify-between">
+                  {/* Added dark mode class */}
                   Start uploading Blog to get started 🎉{" "}
                 </div>
               ) : (
@@ -139,7 +168,13 @@ export default function Blog() {
                   width="40"
                   ariaLabel="color-ring-loading"
                   wrapperClass="color-ring-wrapper"
-                  colors={["#0390fc", "#0390fc", "#0390fc", "#0390fc", "#0390fc"]}
+                  colors={[
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                  ]}
                 />
               )}
             </div>

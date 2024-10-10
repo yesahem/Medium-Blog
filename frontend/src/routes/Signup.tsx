@@ -4,6 +4,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
 
 const alertSuccess = () =>
   toast.success("Signup Successful, Redirecting to Login");
@@ -33,7 +34,7 @@ export default function SignUp() {
     //    const hashedPassword = await hashUsersPassword(password);
 
     axios
-      .post("https://backend.ahemraj82.workers.dev/api/v1/user/signup", {
+      .post(`${USER_API_ENDPOINT_LOCAL}/signup`, {
         name: name,
         email: email,
         password: password,
@@ -62,8 +63,12 @@ export default function SignUp() {
   }
 
   return (
-    <main className="flex-1 bg-gray-100 dark:bg-gray-900"> {/* Added dark mode class */}
-      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800"> {/* Added dark mode class */}
+    <main className="flex-1 bg-gray-100 dark:bg-gray-900">
+      {" "}
+      {/* Added dark mode class */}
+      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
+        {" "}
+        {/* Added dark mode class */}
         <div className="flex items-center">
           <DarkModeToggle /> {/* Added DarkModeToggle component */}
         </div>
@@ -72,17 +77,28 @@ export default function SignUp() {
         <div className="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+              <h1 className="text-3xl font-bold sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100">
+                {" "}
+                {/* Added dark mode class */}
                 Create a new account
               </h1>
-              <p className="max-w-md text-gray-500 md:text-xl dark:text-gray-300"> {/* Added dark mode class */}
+              <p className="max-w-md text-gray-500 md:text-xl dark:text-gray-300">
+                {" "}
+                {/* Added dark mode class */}
                 Enter your details to create a new account.
               </p>
             </div>
-            <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg"> {/* Added dark mode class */}
+            <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
+              {" "}
+              {/* Added dark mode class */}
               <form className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    {" "}
+                    {/* Added dark mode class */}
                     Name
                   </label>
                   <input
@@ -97,7 +113,12 @@ export default function SignUp() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    {" "}
+                    {/* Added dark mode class */}
                     Email
                   </label>
                   <input
@@ -112,7 +133,12 @@ export default function SignUp() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+                  >
+                    {" "}
+                    {/* Added dark mode class */}
                     Password
                   </label>
                   <input
@@ -137,7 +163,9 @@ export default function SignUp() {
                 </div>
               </form>
             </div>
-            <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+            <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100">
+              {" "}
+              {/* Added dark mode class */}
               Already have an account?{" "}
               <Link to="/signin" className="underline">
                 Sign in
@@ -146,15 +174,17 @@ export default function SignUp() {
           </div>
           <div className="mt-4 text-center">
             <div className="mt-[15px] text-center justify-center">
-              <h3 className="text-9xl font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+              <h3 className="text-9xl font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100">
+                {" "}
+                {/* Added dark mode class */}
                 “Be yourself; everyone else is already taken.”
                 <br />
               </h3>
               <br />{" "}
               <i>
-                <h5 className="text-md font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                <h5 className="text-md font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100">
                   {" "}
-                  ― Oscar Wilde{" "}
+                  {/* Added dark mode class */} ― Oscar Wilde{" "}
                 </h5>
               </i>
             </div>

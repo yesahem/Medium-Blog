@@ -4,17 +4,17 @@
     "dev": "wrangler dev src/index.ts",
     "start": "wrangler dev index.js --local=true",
     "deploy": "wrangler deploy --minify src/index.ts",
-    "postinstall": "npx prisma generate",
+    "postinstall": "npx prisma generate --no-engine",
     "prisma:migrate": "npx prisma migrate dev",
     "dev:docker": "npm run prisma:migrate && npm run dev"
   },
   "dependencies": {
-    "@prisma/client": "5.18.0",
-    "@prisma/extension-accelerate": "^1.1.0",
+    "@prisma/client": "^5.20.0",
+    "@prisma/extension-accelerate": "^1.2.1",
     "@shishuranjan/backend-common": "^1.0.0",
     "@types/node": "^22.5.1",
     "hono": "^4.5.9",
-    "prisma": "^5.18.0",
+    "prisma": "^5.20.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

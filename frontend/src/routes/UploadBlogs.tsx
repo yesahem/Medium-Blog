@@ -1,29 +1,50 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import { BLOG_API_ENDPOINT_LOCAL } from "../utils/env";
+import { useNavigate } from "react-router-dom";
 
 export default function UploadBlogs() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const token = localStorage.getItem("jwt-token");
 
-  function blogUploadHandler(e: SyntheticEvent) {
-    // send the Title content to the backend and store in Db
+  const blogUploadHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("I am a blog upload handler ");
+    console.log("I am a blog upload handler");
     console.log(`Title: ${title}`);
     console.log(`Content: ${content}`);
-    axios.post("https://backend.ahemraj82.workers.dev/api/v1/blog/", {
-      title: title,
-      content: content,
-      published: true,
-    }).then((res) => {
-      console.log("res after blog update is ", res);
-    });
-  }
+
+    try {
+      const res = await axios.post(
+        `${BLOG_API_ENDPOINT_LOCAL}/createpost`,
+        {
+          title: title,
+          content: content,
+          published: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response after blog upload:", res);
+      // Redirect to the blog page after successful upload
+      navigate("/blog"); // Adjust the path as needed
+    } catch (err) {
+      console.error("Error uploading blog:", err);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900"> {/* Added dark mode class */}
-      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800"> {/* Added dark mode class */}
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      {" "}
+      {/* Added dark mode class */}
+      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
+        {" "}
+        {/* Added dark mode class */}
         <div className="flex items-center">
           <DarkModeToggle /> {/* Added DarkModeToggle component */}
         </div>
@@ -33,19 +54,26 @@ export default function UploadBlogs() {
           <div className="mx-auto px-4 md:px-6">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold text-center tracking-tight sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                <h1 className="text-3xl font-bold text-center tracking-tight sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100">
+                  {" "}
+                  {/* Added dark mode class */}
                   Upload your Blog
                 </h1>
                 <div className="items-center justify-center flex">
-                  <p className="max-w-lg text-gray-500 md:text-xl justify-center dark:text-gray-300"> {/* Added dark mode class */}
+                  <p className="max-w-lg text-gray-500 md:text-xl justify-center dark:text-gray-300">
+                    {" "}
+                    {/* Added dark mode class */}
                     Blogging is an art, Be an artist
                   </p>
                 </div>
               </div>
-              <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg mx-auto border-2 border-green-400"> {/* Added dark mode class */}
-                <form className="space-y-4">
+              <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg mx-auto border-2 border-green-400">
+                {" "}
+                {/* Added dark mode class */}
+                <form className="space-y-4" onSubmit={blogUploadHandler}>
                   <div className="space-y-2">
-                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {/* Added dark mode class */}
                       Title
                     </div>
                     <input
@@ -57,7 +85,9 @@ export default function UploadBlogs() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100"> {/* Added dark mode class */}
+                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {" "}
+                      {/* Added dark mode class */}
                       Your Content Here
                     </div>
                     <textarea
@@ -70,7 +100,6 @@ export default function UploadBlogs() {
                   <div className="mt-4">
                     <button
                       type="submit"
-                      onClick={blogUploadHandler}
                       className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                       Upload

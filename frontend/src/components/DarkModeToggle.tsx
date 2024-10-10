@@ -22,7 +22,7 @@ export default function DarkModeToggle() {
   };
 
   return (
-    <button onClick={toggleDarkMode} className="p-2">
+    <button onClick={toggleDarkMode} className="p-2 dark:text-white">
       {isDarkMode ? 'Light Mode' : 'Dark Mode'}
     </button>
   );
