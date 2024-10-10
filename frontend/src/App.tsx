@@ -8,6 +8,7 @@ import Test from "./routes/Test";
 import Fetch from "./components/Fetch";
 // import { lazy, Suspense } from "react";
 import UploadBlogs from "./routes/UploadBlogs";
+import Error from "./components/Error";
 // import Test2 from "./routes/Test2";
 
 //const Test = lazy(() => import("./routes/Test"));
@@ -28,6 +29,7 @@ const routes = createBrowserRouter([
       <Index />
       //</Suspense>
     ),
+    errorElement: <Error />,
     children: [
        {
         path: "",
