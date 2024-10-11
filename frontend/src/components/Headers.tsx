@@ -1,78 +1,66 @@
 import { Link, useNavigate } from "react-router-dom";
-import DarkModeToggle from "./DarkModeToggle"; // Import the DarkModeToggle component
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
-  const isLoggedIn = localStorage.getItem("isLogin") === "true"; // Check if logged in
-  const navigate = useNavigate(); // For programmatic navigation
+  const isLoggedIn = localStorage.getItem("isLogin") === "true";
+  const navigate = useNavigate();
 
   const handleIconClick = () => {
-    if (isLoggedIn) {
-      navigate("/blog"); // Navigate to /blog if logged in
-    } else {
-      navigate("/home"); // Navigate to /signin if not logged in
-    }
+    navigate(isLoggedIn ? "/blog" : "/home");
   };
 
   const handleLogout = () => {
-    localStorage.setItem("isLogin", "false"); // Log out the user
-    localStorage.removeItem("jwt-token"); // Remove the JWT token from local storage
-    localStorage.removeItem("isLogin"); // Remove the isLogin flag from local storage
-    navigate("/signin"); // Redirect to /signin after logging out
+    localStorage.removeItem("jwt-token");
+    localStorage.removeItem("isLogin");
+    navigate("/signin");
   };
 
   return (
-    <header className="bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 h-14 flex items-center border-b">
-      {/* Logo/Icon with conditional navigation */}
+    <header className="bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 h-14 flex items-center justify-between border-b">
       <div
         onClick={handleIconClick}
         className="flex items-center justify-center cursor-pointer"
       >
         <img
           src="https://cdn3.iconfinder.com/data/icons/social-rounded-2/72/Codepen-512.png"
-          alt="codepen"
+          alt="Codepen logo"
           className="h-6 w-6"
         />
-        <span className="sr-only">Icon</span>
+        <span className="sr-only">Navigate to {isLoggedIn ? 'Blog' : 'Home'}</span>
       </div>
 
-      {/* Conditional navigation links based on login status */}
-      <nav className="ml-auto flex gap-4 sm:gap-6 dark:text-white">
+      <nav className="flex items-center space-x-4">
+        <Link to="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+          Home
+        </Link>
+        <Link to="/blog" className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+          Blogs
+        </Link>
         {isLoggedIn ? (
-          <>
-            {/* Links shown when user is logged in */}
-            <Link to="/blog" className="text-sm font-medium hover:underline">
-              Home
-            </Link>
-            <div>
-              <button
-                onClick={handleLogout}
-                className="text-sm font-medium hover:underline"
-              >
-                Logout
-              </button>
-            </div>
-          </>
+          <button
+            onClick={handleLogout}
+            className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+          >
+            Logout
+          </button>
         ) : (
           <>
-            {/* Links shown when user is not logged in */}
-            <Link to="/home" className="text-sm font-medium hover:underline">
-              Home
-            </Link>
-            <Link to="/signin" className="text-sm font-medium hover:underline">
+            <button
+              onClick={() => navigate("/signin")}
+              className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+            >
               Sign In
-            </Link>
-            <Link to="/signup" className="text-sm font-medium hover:underline">
+            </button>
+            <button
+              onClick={() => navigate("/signup")}
+              className="px-3 py-2  text-sm text-white bg-gray-900 rounded hover:bg-gray-700 transition-colors duration-200"
+            >
               Sign Up
-            </Link>
-            <Link to="/blog" className="text-sm font-medium hover:underline">
-              Blogs
-            </Link>
+            </button>
           </>
         )}
+        <DarkModeToggle />
       </nav>
-
-      {/* Dark Mode Toggle */}
-      <DarkModeToggle />
     </header>
   );
 }
