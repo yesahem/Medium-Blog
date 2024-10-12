@@ -14,7 +14,7 @@ export default function Header() {
     localStorage.removeItem("isLogin");
     navigate("/signin");
   };
-
+  
   return (
     <header className="bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 h-14 flex items-center justify-between border-b">
       <div
@@ -30,6 +30,7 @@ export default function Header() {
       </div>
 
       <nav className="flex items-center space-x-4">
+      <DarkModeToggle />
         <Link to="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
           Home
         </Link>
@@ -59,7 +60,6 @@ export default function Header() {
             </button>
           </>
         )}
-        <DarkModeToggle />
       </nav>
     </header>
   );
