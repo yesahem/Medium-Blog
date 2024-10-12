@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import "react-custom-alert/dist/index.css";
-import { BLOG_API_ENDPOINT_LOCAL, USER_API_ENDPOINT_PROD } from "../utils/env";
+import {  BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD } from "../utils/env";
 // import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 interface posts {
@@ -68,7 +68,7 @@ export default function Blog() {
 
   useEffect(() => {
     axios
-      .get(`${BLOG_API_ENDPOINT_LOCAL}/bulk`, {
+      .get(`${BLOG_API_ENDPOINT_PROD}/bulk`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
