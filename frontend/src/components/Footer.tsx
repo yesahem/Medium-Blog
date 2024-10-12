@@ -1,16 +1,20 @@
 import { Link } from "react-router-dom";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col sm:flex-row py-6 w-full items-center px-4 md:px-6 border-t">
-      <p className="text-xs text-gray-500">
-        &copy; 2024 Made By Shishu with ❤️
-      </p>
-      <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-        <Link to="#" className="text-xs hover:underline">
+    <footer className="flex flex-col sm:flex-row py-6 w-full items-center px-4 md:px-6 border-t dark:border-gray-800 bg-white dark:bg-gray-950 transition-colors duration-300">
+      <div className="flex items-center space-x-4">
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          &copy; 2024 Made By Shishu with ❤️
+        </p>
+        <DarkModeToggle />
+      </div>
+      <nav className="sm:ml-auto flex gap-4 sm:gap-6 mt-4 sm:mt-0">
+        <Link to="#" className="text-xs hover:underline text-gray-600 dark:text-gray-300">
           Thanks to GPT and google for help
         </Link>
-        <Link to="#" className="text-xs hover:underline">
+        <Link to="#" className="text-xs hover:underline text-gray-600 dark:text-gray-300">
           Privacy jaisa kuch nahi hota
         </Link>
       </nav>
