@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import {  BLOG_API_ENDPOINT_PROD } from "../utils/env";
+import {  BLOG_API_ENDPOINT_LOCAL, BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadBlogs() {
@@ -18,7 +18,7 @@ export default function UploadBlogs() {
 
     try {
       const res = await axios.post(
-        `${BLOG_API_ENDPOINT_PROD}/createpost`,
+        `${BLOG_API_ENDPOINT_LOCAL}/createpost`,
         {
           title: title,
           content: content,
