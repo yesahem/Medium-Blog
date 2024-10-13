@@ -7,6 +7,7 @@ import {
 } from "@shishuranjan/backend-common/dist/validations";
 import { Bindings, Variables } from "../types/env.types";
 import { createFactory } from "hono/factory";
+import { log } from "console";
 
 export const blogsRouter = new Hono<{
   Bindings: Bindings;
@@ -119,15 +120,19 @@ export const getBlogByIdHandler = factory.createHandlers(async (c) => {
 
 // Get All Blogs Handler
 export const getAllBlogsHandler = factory.createHandlers(async (c) => {
+  console.log("Getting all posts from backend /bulk route");
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
+  console.log("Prisma client created");
+  
   const allPosts = await prisma.post.findMany();
   return c.json({
     message: "This is a route to get all the posts",
     posts: allPosts,
   });
+  
 });
 
 // Delete Blog by ID Handler
