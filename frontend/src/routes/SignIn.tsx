@@ -5,6 +5,7 @@ import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 import { LoginHandler } from "../utils/loginFunc";
 
+
 const alertSuccess = () => toast.success("Login Success");
 const alertError = (str: string) => toast.error(str);
 

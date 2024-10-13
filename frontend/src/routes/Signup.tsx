@@ -36,7 +36,7 @@ export default function SignUp() {
     //    const hashedPassword = await hashUsersPassword(password);
 
     axios
-      .post(`${USER_API_ENDPOINT_LOCAL}/signup`, {
+      .post(`${USER_API_ENDPOINT_PROD}/signup`, {
         name: name,
         email: email,
         password: password,
