@@ -7,6 +7,9 @@ import {
   SigninSchema,
 } from "@shishuranjan/backend-common/dist/validations";
 import { generateToken } from "../utils/generateToken";
+import bcrypt from 'bcryptjs'
+import { log } from "console";
+import { get } from "http";
 
 // Define factory and schema
 const factory = createFactory();
@@ -46,11 +49,13 @@ export const signUpHandler = factory.createHandlers(async (c) => {
       return c.json({ message: "User Already Exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(body.password, 10)
+
     const createUser = await prisma.user.create({
       data: {
         email: body.email,
         name: body.name,
-        password: body.password,
+        password: hashedPassword,
       },
     });
 
@@ -76,7 +81,7 @@ export const signInHandler = factory.createHandlers(async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
 
-    const body: SigninSchema = await c.req.json();
+    const body = await c.req.json();
     const isValidCreds = signinSchemaUsingZod.safeParse(body);
 
     if (!isValidCreds.success) {
@@ -93,13 +98,27 @@ export const signInHandler = factory.createHandlers(async (c) => {
       return c.json({ message: "User Doesn't Exist" });
     }
 
+    console.log(getUser);
+    
+
+    const isPasswordValid = await bcrypt.compare(body.password, getUser.password);
+
+    if (!isPasswordValid) {
+      c.status(403);
+      return c.json({ message: "Invalid password" });
+    }
+    
+    console.log("sgnkjsgkjs",isPasswordValid);
+    
     const payload = { id: getUser.id };
+    console.log(payload);
+    
     const token = await generateToken(payload, c.env.JWT_SECRET);
     console.log(token);
 
     return c.json({ getUser, token });
-  } catch (err) {
-    return c.json({ message: "Something went wrong" });
+  } catch (err: any) {
+    return c.json({ message: "Something went wrong", error: err.message });  // Return detailed error
   }
 });
 
