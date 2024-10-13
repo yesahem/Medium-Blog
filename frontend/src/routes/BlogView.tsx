@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import {  BLOG_API_ENDPOINT_LOCAL, BLOG_API_ENDPOINT_PROD } from "../utils/env";
+import {  BLOG_API_ENDPOINT_LOCAL } from "../utils/env";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Header from "../components/Headers";
 import { format } from "date-fns";

@@ -4,7 +4,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import { USER_API_ENDPOINT_LOCAL, USER_API_ENDPOINT_PROD } from "../utils/env";
+import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
 
 const alertSuccess = () =>
   toast.success("Signup Successful, Redirecting to Login");
