@@ -4,7 +4,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import { USER_API_ENDPOINT_LOCAL} from "../utils/env";
+import {  USER_API_ENDPOINT_PROD} from "../utils/env";
 
 const alertSuccess = () => toast.success("Login Success");
 const alertError = (str: string) => toast.error(str);
@@ -25,7 +25,7 @@ export default function SignIn() {
 
     axios
       .post(
-        `${USER_API_ENDPOINT_LOCAL}/signin`,
+        `${USER_API_ENDPOINT_PROD}/signin`,
         {
           email,
           password,
