@@ -14,7 +14,6 @@
     "@shishuranjan/backend-common": "^1.0.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.5.1",
-    "argon2": "^0.41.1",
     "bcryptjs": "^2.4.3",
     "hono": "^4.5.9",
     "prisma": "^5.20.0",
