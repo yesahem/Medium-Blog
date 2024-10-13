@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
+import { LoginHandler } from "../utils/loginFunc";
 
 const alertSuccess = () =>
   toast.success("Signup Successful, Redirecting to Login");
@@ -20,9 +21,10 @@ async function hashUsersPassword(usersPassword: string) {
 */
 
 export default function SignUp() {
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showDemo, setShowDemo] = useState(true);
 
   const navigate = useNavigate();
 
@@ -62,6 +64,16 @@ export default function SignUp() {
       });
   }
 
+  const token = localStorage.getItem("jwt-token") ?? "";
+
+  // demo login handler
+  const handleDemoClick = async () => {
+    const email = "random1@gmail.com";
+    const password = "random123";
+    await LoginHandler({ email, password, token, navigate, alertSuccess, alertError});
+    setShowDemo(false);
+  };
+
   return (
     <main className="flex-1 bg-gray-100 dark:bg-gray-900">
       {" "}
@@ -73,7 +85,7 @@ export default function SignUp() {
           <DarkModeToggle /> {/* Added DarkModeToggle component */}
         </div>
       </header>
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      <section className="w-full py-12 md:py-24 lg:py-32 relative">
         <div className="container px-4 md:px-6 grid gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
@@ -163,7 +175,7 @@ export default function SignUp() {
                 </div>
               </form>
             </div>
-            <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100">
+            <div className="mt-4 w-[80%] text-center text-sm text-gray-900 dark:text-gray-100">
               {" "}
               {/* Added dark mode class */}
               Already have an account?{" "}
@@ -189,6 +201,32 @@ export default function SignUp() {
               </i>
             </div>
           </div>
+
+          {/* demo component/box */}
+          <div className={`${showDemo ? "" : "hidden"} w-[250px] h-[100px] justify-center items-center absolute bg-slate-300 top-52 md:top-8 md:right-[20%] right-[10%] p-6 z-20 rounded-md max-md:hidden`}>
+            <div className="flex flex-col gap-2 relative">
+              <p 
+              className="absolute top-[-28px] right-[-27px] text-xl rounded-full w-[40px] h-[40px] flex justify-center items-center cursor-pointer"
+              onClick={() => { setShowDemo(false) }}
+              >
+                ❌
+              </p>
+              <div className="gap-y-2 flex flex-col">
+                <p className="text-2xl font-extrabold text-richblack-5 flex items-center -mt-1">
+                  Try Demo
+                </p>
+                <div>
+                  <button
+                    onClick={handleDemoClick}
+                    className="bg-gray-800 text-white font-medium font-mono mb-1 text-richblack-25 px-4 py-1 rounded-md flex"
+                  >
+                    🚀 Click for Demo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </section>
     </main>
