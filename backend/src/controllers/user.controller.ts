@@ -8,8 +8,6 @@ import {
 } from "@shishuranjan/backend-common/dist/validations";
 import { generateToken } from "../utils/generateToken";
 import bcrypt from 'bcryptjs'
-import { log } from "console";
-import { get } from "http";
 
 // Define factory and schema
 const factory = createFactory();
