@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import DarkModeToggle from "./DarkModeToggle";
 
 export default function Footer() {
   return (
@@ -8,7 +7,6 @@ export default function Footer() {
         <p className="text-xs text-gray-500 dark:text-gray-400">
           &copy; 2024 Made By Shishu with ❤️
         </p>
-        <DarkModeToggle />
       </div>
       <nav className="sm:ml-auto flex gap-4 sm:gap-6 mt-4 sm:mt-0">
         <Link to="#" className="text-xs hover:underline text-gray-600 dark:text-gray-300">
