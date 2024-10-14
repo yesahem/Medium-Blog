@@ -67,8 +67,9 @@ export const signUpHandler = factory.createHandlers(async (c) => {
       token,
       id: createUser.id,
     });
-  } catch (err) {
-    return c.json({ message: "Some error occurred", err });
+  } catch (err:any) {
+    console.error("Error during sign-up:", err.message);
+    return c.json({ message: "Some error occurred", err: err.message });
   }
 });
 
@@ -106,9 +107,7 @@ export const signInHandler = factory.createHandlers(async (c) => {
       return c.json({ message: "Invalid password" });
     }
     
-    console.log("sgnkjsgkjs",isPasswordValid);
-    
-    const payload = { id: getUser.id };
+    const payload = { id: getUser.id , email: getUser.email};
     console.log(payload);
     
     const token = await generateToken(payload, c.env.JWT_SECRET);

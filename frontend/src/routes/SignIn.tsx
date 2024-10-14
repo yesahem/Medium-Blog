@@ -13,7 +13,6 @@ const token = localStorage.getItem("jwt-token") ?? "";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showDemo, setShowDemo] = useState(true);
 
   const navigate = useNavigate();
 
@@ -24,10 +23,9 @@ export default function SignIn() {
 
   // demo handler
   const handleDemoClick = async (e:SyntheticEvent) => {
-    const email = "random1@gmail.com";
-    const password = "random123";
+    const email = "demouser@gmail.com";
+    const password = "demo@123";
     await LoginHandler({e, email, password, token, navigate, alertSuccess, alertError});
-    setShowDemo(false);
   };
 
   return (
@@ -101,12 +99,20 @@ export default function SignIn() {
                   />
                 </div>
               </div>
-              <div className="mt-4">
+              <div className="mt-4 text-center">
                 <button
-                  className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="w-full p-2 bg-blue-500 mb-2 text-white rounded hover:bg-blue-600"
                   onClick={handleLogin}
                 >
                   Sign in
+                </button>
+
+                <p className="text-sm text-slate-100">-------- OR -------</p>
+                {/* DEMO SIGNIN */}
+                <button onClick={handleDemoClick}
+                  className="w-full py-1 my-2 bg-blue-900 text-white rounded hover:bg-blue-800"
+                >
+                    Login as a Guest 
                 </button>
               </div>
             </div>
@@ -117,31 +123,6 @@ export default function SignIn() {
               <Link to="/signup" className="underline">
                 Sign up
               </Link>
-            </div>
-          </div>
-
-          {/* demo component/box */}
-          <div className={`${showDemo ? "" : "hidden"} w-[250px] h-[100px] justify-center items-center absolute bg-slate-300 top-52 md:top-8 md:right-[20%] right-[10%] p-6 z-20 rounded-md max-md:hidden`}>
-            <div className="flex flex-col gap-2 relative">
-              <p 
-              className="absolute top-[-28px] right-[-27px] text-xl rounded-full w-[40px] h-[40px] flex justify-center items-center cursor-pointer"
-              onClick={() => { setShowDemo(false) }}
-              >
-                ❌
-              </p>
-              <div className="gap-y-2 flex flex-col">
-                <p className="text-2xl font-extrabold text-richblack-5 flex items-center -mt-1">
-                  Try Demo
-                </p>
-                <div>
-                  <button
-                    onClick={handleDemoClick}
-                    className="bg-gray-800 text-white font-medium font-mono mb-1 text-richblack-25 px-4 py-1 rounded-md flex"
-                  >
-                    🚀 Click for Demo
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import {
 import { Bindings, Variables } from "../types/env.types";
 import { createFactory } from "hono/factory";
 import { log } from "console";
+import { demoEmail } from "../utils/demoEmail";
 
 export const blogsRouter = new Hono<{
   Bindings: Bindings;
@@ -20,6 +21,12 @@ const factory = createFactory();
 export const createBlogHandler = factory.createHandlers(async (c) => {
   const user = c.get("user");
   const body: BlogSchema = await c.req.json();
+
+  // demo account restriction
+  const incomingEmail = user?.email;
+  if (incomingEmail === demoEmail) {
+    return c.json({ message: "Not Allowed on Guest Account!" }, { status: 403 });
+  }
 
   if (!body) {
     c.status(411);
@@ -46,6 +53,13 @@ export const createBlogHandler = factory.createHandlers(async (c) => {
 export const updateBlogHandler = factory.createHandlers(async (c) => {
   const userid = c.var.userid; // Get the user ID from the context
   const updatedBody: UpdateBlogSchema = await c.req.json();
+
+  // demo account restriction
+  const user = c.get("user");
+  const incomingEmail = user?.email;
+  if (incomingEmail === demoEmail) {
+    return c.json({ message: "Not Allowed on Guest Account!" }, { status: 403 });
+  }
 
   if (!updatedBody || (!updatedBody.title && !updatedBody.content)) {
     c.status(411);
@@ -140,6 +154,13 @@ export const deleteBlogHandler = factory.createHandlers(async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
+
+  // demo account restriction
+  const user = c.get("user");
+  const incomingEmail = user?.email;
+  if (incomingEmail === demoEmail) {
+    return c.json({ message: "Not Allowed on Guest Account!" }, { status: 403 });
+  }
 
   const userid = c.var.userid; // Get the user ID from the context
   const { id } = c.req.param(); // Get the blog ID from the request body

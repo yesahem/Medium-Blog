@@ -9,11 +9,6 @@
   dependencies:
     mime "^3.0.0"
 
-"@cloudflare/workerd-darwin-arm64@1.20240821.1":
-  version "1.20240821.1"
-  resolved "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-1.20240821.1.tgz"
-  integrity sha512-Q+9RedvNbPcEt/dKni1oN94OxbvuNAeJkgHmrLFTGF8zu21wzOhVkQeRNxcYxrMa9mfStc457NAg13OVCj2kHQ==
-
 "@cloudflare/workers-shared@0.3.0":
   version "0.3.0"
   resolved "https://registry.npmjs.org/@cloudflare/workers-shared/-/workers-shared-0.3.0.tgz"
@@ -43,11 +38,6 @@
   dependencies:
     escape-string-regexp "^4.0.0"
     rollup-plugin-node-polyfills "^0.2.1"
-
-"@esbuild/darwin-arm64@0.17.19":
-  version "0.17.19"
-  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.17.19.tgz"
-  integrity sha512-80wEoCfF/hFKM6WE1FyBHc9SfUblloAWx6FJkFWTWiCoht9Mc0ARGEM47e67W9rI09YoUxJL68WHfDRYEAvOhg==
 
 "@fastify/busboy@^2.0.0":
   version "2.1.1"
@@ -297,11 +287,6 @@ fill-range@^7.1.1:
   integrity sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==
   dependencies:
     to-regex-range "^5.0.1"
-
-fsevents@~2.3.2, fsevents@2.3.3:
-  version "2.3.3"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
-  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
   version "1.1.2"

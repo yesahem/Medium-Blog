@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import "react-custom-alert/dist/index.css";
-import {   BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD} from "../utils/env";
+import { BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD } from "../utils/env";
 // import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 interface posts {
@@ -17,7 +17,7 @@ interface posts {
 }
 
 const token = localStorage.getItem("jwt-token");
-console.log(`this is your token ${token}`);
+// console.log(`this is your token ${token}`);
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
@@ -42,7 +42,7 @@ export default function Blog() {
         }
       );
       console.log("Response", response);
-      console.log("Setting name", response.data.user.name);
+      // console.log("Setting name", response.data.user.name);
       setUserName(response.data.user.name);
     } catch (error) {
       toast.error("Error fetching user info");
@@ -75,7 +75,7 @@ export default function Blog() {
       })
       .then((res) => {
         console.log("print response ", res);
-        console.log(`Posts length:`, res.data.posts.length);
+        // console.log(`Posts length:`, res.data.posts.length);
         if (res.data.posts.length === 0 || res.data.posts) {
           setShowMessage(true);
           setPosts([]);
@@ -84,8 +84,8 @@ export default function Blog() {
         const description = res.data.posts.map((post: { title: string }) => {
           setDescription(post.title.substring(0, 5));
         });
-        console.log("description is", description);
-        console.log("description2 is", description2);
+        // console.log("description is", description);
+        // console.log("description2 is", description2);
       })
       .catch((err) => {
         console.log("Error in get axios");
@@ -110,7 +110,7 @@ export default function Blog() {
             <div className="flex justify-between items-center mb-8 p-6 rounded-lg">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  Welcome Back {userName.charAt(0).toUpperCase() + userName.slice(1)}
+                  Welcome Back{" "} {userName.charAt(0).toUpperCase() + userName.slice(1)}
                 </h1>
                 {/* Added dark mode class */}
                 <p className="text-gray-600 dark:text-gray-300">

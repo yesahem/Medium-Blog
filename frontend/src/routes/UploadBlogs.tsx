@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SyntheticEvent, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import {   BLOG_API_ENDPOINT_PROD } from "../utils/env";
+import {  BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { useNavigate } from "react-router-dom";
 
 export default function UploadBlogs() {
@@ -31,6 +31,9 @@ export default function UploadBlogs() {
         }
       );
       console.log("Response after blog upload:", res);
+      if (res?.data?.message === "Not Allowed on Guest Account!" && res?.status=== 403){
+        window.alert("Create New Account!")
+      }
       // Redirect to the blog page after successful upload
       navigate("/blog"); // Adjust the path as needed
     } catch (err) {
