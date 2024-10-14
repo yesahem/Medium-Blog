@@ -46,17 +46,17 @@ const ViewBlog = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <div className="flex justify-center items-center h-screen bg-gray-100 dark:bg-gray-900">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600 dark:text-blue-400" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 bg-gray-100 dark:bg-gray-900">
         <div
-          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4"
+          className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-200 p-4"
           role="alert"
         >
           <p className="font-bold">Error</p>
@@ -68,9 +68,9 @@ const ViewBlog = () => {
 
   if (!post) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 bg-gray-100 dark:bg-gray-900">
         <div
-          className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4"
+          className="bg-yellow-100 dark:bg-yellow-900 border-l-4 border-yellow-500 text-yellow-700 dark:text-yellow-200 p-4"
           role="alert"
         >
           <p className="font-bold">Not Found</p>
@@ -81,10 +81,10 @@ const ViewBlog = () => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 min-h-screen">
+    <div className="bg-gray-100 dark:bg-gray-900 min-h-screen">
       <Header />
       <main className="container mx-auto px-4 py-8 lg:max-w-3xl sm:px-6 lg:px-8">
-        <article className="mb-12">
+        <article className="mb-12 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
             {post.title}
           </h1>
@@ -94,21 +94,15 @@ const ViewBlog = () => {
             </time>
             <span className="mx-2">•</span>
             <span>
-              {post.author.name.charAt(0).toUpperCase() +
-                post.author.name.slice(1)}
+              {post.author.name.charAt(0).toUpperCase() + post.author.name.slice(1)}
             </span>
           </div>
           <div className="prose dark:prose-invert max-w-none">
-            {post.content
-              .split("\n\n")
-              .map((paragraph: string, index: number) => (
-                <p
-                  key={index}
-                  className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
-                >
-                  {paragraph}
-                </p>
-              ))}
+            {post.content.split("\n\n").map((paragraph: string, index: number) => (
+              <p key={index} className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </article>
         <div className="mt-8">

@@ -99,88 +99,70 @@ export default function Blog() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       <Header />
-      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-        {" "}
-        {/* Added dark mode class */}
-        <main className="flex-1 flex flex-col items-center py-8">
-          <section className="w-full max-w-5xl">
-            {/* User Info Section */}
-            <div className="flex justify-between items-center mb-8 p-6 rounded-lg">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  Welcome Back {userName.charAt(0).toUpperCase() + userName.slice(1)}
-                </h1>
-                {/* Added dark mode class */}
-                <p className="text-gray-600 dark:text-gray-300">
-                  Here are your blog posts:
-                </p>
-                {/* Added dark mode class */}
-              </div>
-              <div>
-                <Link
-                  to="/upload-blogs"
-                  className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-                >
-                  Create New Post
-                </Link>
-              </div>
+      <main className="flex-1 flex flex-col items-center py-8">
+        <section className="w-full max-w-5xl px-4">
+          <div className="flex justify-between items-center mb-8 p-6 rounded-lg bg-white dark:bg-gray-800">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                Welcome Back {userName.charAt(0).toUpperCase() + userName.slice(1)}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300">
+                Here are your blog posts:
+              </p>
             </div>
+            <div>
+              <Link
+                to="/upload-blogs"
+                className="inline-block px-6 py-3 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors duration-200"
+              >
+                Create New Post
+              </Link>
+            </div>
+          </div>
 
-            {/* Posts List */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              {posts.length > 0 ? (
-                posts.map((post: posts, index) => (
-                  <div
-                    key={index}
-                    className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex flex-col justify-between"
-                  >
-                    {" "}
-                    {/* Added dark mode class */}
-                    <div>
-                      <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-                        {post.title}
-                      </h2>
-                      {/* Added dark mode class */}
-                      <p className="text-gray-600 dark:text-gray-300 mb-4">
-                        {truncateContent(post.content, 100)}
-                      </p>
-                      {/* Added dark mode class */}
-                    </div>
-                    <Link
-                      to={`/view-blog/${post.id}`}
-                      className="inline-block text-blue-500 hover:underline"
-                    >
-                      Read More
-                    </Link>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {posts.length > 0 ? (
+              posts.map((post: posts, index) => (
+                <div
+                  key={index}
+                  className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
+                >
+                  <div>
+                    <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
+                      {post.title}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
+                      {truncateContent(post.content, 100)}
+                    </p>
                   </div>
-                ))
-              ) : showMessage ? (
-                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex justify-between">
-                  {/* Added dark mode class */}
-                  Start uploading Blog to get started 🎉{" "}
+                  <Link
+                    to={`/view-blog/${post.id}`}
+                    className="inline-block text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    Read More
+                  </Link>
                 </div>
-              ) : (
-                <ColorRing
-                  visible={true}
-                  height="40"
-                  width="40"
-                  ariaLabel="color-ring-loading"
-                  wrapperClass="color-ring-wrapper"
-                  colors={[
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                  ]}
-                />
-              )}
-            </div>
-          </section>
-        </main>
-      </div>
+              ))
+            ) : showMessage ? (
+              <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between text-gray-600 dark:text-gray-300">
+                Start uploading Blog to get started 🎉
+              </div>
+            ) : (
+              <ColorRing
+                visible={true}
+                height="40"
+                width="40"
+                ariaLabel="color-ring-loading"
+                wrapperClass="color-ring-wrapper"
+                colors={["#0390fc", "#0390fc", "#0390fc", "#0390fc", "#0390fc"]}
+              />
+            )}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
+

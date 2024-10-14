@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col sm:flex-row py-6 w-full items-center px-4 md:px-6 border-t dark:border-gray-800 bg-white dark:bg-gray-950 transition-colors duration-300">
+    <footer className="flex flex-col sm:flex-row py-6 w-full items-center px-4 md:px-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="flex items-center space-x-4">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           &copy; 2024 Made By Shishu with ❤️

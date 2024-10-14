@@ -3,8 +3,8 @@ import { SyntheticEvent, useState } from "react";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
+import DarkModeToggle from "../components/DarkModeToggle"; 
+import {  USER_API_ENDPOINT_PROD} from "../utils/env";
 
 const alertSuccess = () => toast.success("Login Success");
 const alertError = (str: string) => toast.error(str);
@@ -25,7 +25,7 @@ export default function SignIn() {
 
     axios
       .post(
-        `${USER_API_ENDPOINT_LOCAL}/signin`,
+        `${USER_API_ENDPOINT_PROD}/signin`,
         {
           email,
           password,
@@ -37,39 +37,17 @@ export default function SignIn() {
         }
       )
       .then((res) => {
-        console.log("pinki", res);
-
-        if (res.data.getUser.email === email) {
-          console.log(`email: ${email}`);
-
-          localStorage.setItem("isLogin", "false");
-          if (res.data.getUser.password === password) {
-            console.log("Login Response is:", res);
-            alertSuccess();
-            localStorage.setItem("jwt-token", res.data.token);
-            localStorage.setItem("isLogin", "true");
-            navigate("/blog");
-          } else {
-            alertError("Incorrect Password");
-          }
+        if (res.data.token) {
+          console.log("Login Response is:", res);
+          alertSuccess();
+          localStorage.setItem("jwt-token", res.data.token);
+          localStorage.setItem("isLogin", "true");
+          navigate("/blog");
         } else {
-          alertError("Incorrect Email");
+          alertError("Incorrect credentials");
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(`password check ${err}`);
-        console.log("error type ", typeof err);
-        if (err.response && err.response.data && err.response.data.message) {
-          alertError(err.response.data.message);
-        } else {
-          alertError("Invalid Credentials");
-        }
-        console.log("Login Error", err);
-      });
-
-    console.log("token: ", token);
-    console.log("hii there");
+      }
+    )
   }
 
   return (

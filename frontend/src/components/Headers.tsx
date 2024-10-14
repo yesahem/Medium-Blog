@@ -16,7 +16,7 @@ export default function Header() {
   };
   
   return (
-    <header className="bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 h-14 flex items-center justify-between border-b">
+    <header className="bg-white dark:bg-gray-900 px-4 lg:px-6 h-14 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
       <div
         onClick={handleIconClick}
         className="flex items-center justify-center cursor-pointer"
@@ -30,7 +30,7 @@ export default function Header() {
       </div>
 
       <nav className="flex items-center space-x-4">
-      <DarkModeToggle />
+        <DarkModeToggle />
         <Link to="/home" className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
           Home
         </Link>
@@ -54,7 +54,7 @@ export default function Header() {
             </button>
             <button
               onClick={() => navigate("/signup")}
-              className="px-3 py-2  text-sm text-white bg-gray-900 rounded hover:bg-gray-700 transition-colors duration-200"
+              className="px-3 py-2 text-sm text-white bg-blue-600 dark:bg-blue-500 rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
             >
               Sign Up
             </button>
