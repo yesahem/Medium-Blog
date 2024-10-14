@@ -35,18 +35,18 @@ const posts: Post[] = [
 ];
 export default function Test() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       <main className="flex-1 flex flex-col items-center py-8">
-        <section className="w-full max-w-5xl">
+        <section className="w-full max-w-5xl px-4 md:px-6">
           {/* User Info Section */}
-          <div className="flex justify-between items-center mb-8 p-6 rounded-lg ">
+          <div className="flex justify-between items-center mb-8 p-6 rounded-lg bg-white dark:bg-gray-800">
             <div>
-              <h1 className="text-3xl font-bold">Welcome back, Shishu!</h1>
-              <p className="text-gray-600">Here are your latest blog posts:</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome  back, Shishu!</h1>
+              <p className="text-gray-600 dark:text-gray-400">Here are your latest blog posts:</p>
             </div>
             <Link
               to="/upload_blogs"
-              className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+              className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors duration-200"
             >
               Create New Post
             </Link>
@@ -58,25 +58,25 @@ export default function Test() {
               posts.map((post) => (
                 <div
                   key={post.id}
-                  className="bg-white p-6 shadow rounded-lg border flex flex-col justify-between"
+                  className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
                 >
                   <div>
-                    <h2 className="text-2xl font-semibold mb-2">
+                    <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
                       {post.title}
                     </h2>
-                    <p className="text-gray-600 mb-4">{post.description}</p>
-                    <p className="text-sm text-gray-500 mb-4">{post.date}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">{post.description}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">{post.date}</p>
                   </div>
                   <Link
                     to={`/posts/${post.id}`}
-                    className="inline-block text-blue-500 hover:underline"
+                    className="inline-block text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
                   >
                     Read More
                   </Link>
                 </div>
               ))
             ) : (
-              <p className="text-center text-gray-600">No posts yet.</p>
+              <p className="text-center text-gray-600 dark:text-gray-400">No posts yet.</p>
             )}
           </div>
         </section>
