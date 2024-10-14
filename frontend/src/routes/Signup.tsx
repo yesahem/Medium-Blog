@@ -177,10 +177,11 @@ export default function SignUp() {
 
                   <p className="text-sm text-slate-100">-------- OR -------</p>
                   {/* DEMO SIGNIN */}
-                  <button onClick={handleDemoClick}
+                  <button
+                    onClick={handleDemoClick}
                     className="w-full py-1 my-2 bg-blue-900 text-white rounded hover:bg-blue-800"
                   >
-                      Login as a Guest 
+                    Login as a Guest
                   </button>
                 </div>
               </form>
@@ -211,7 +212,6 @@ export default function SignUp() {
               </i>
             </div>
           </div>
-
         </div>
       </section>
     </main>

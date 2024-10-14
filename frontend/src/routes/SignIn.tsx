@@ -17,15 +17,31 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   // login handler
-  const handleLogin = async(e:SyntheticEvent) => {
-    await LoginHandler({e, email, password, token, navigate, alertSuccess, alertError});
+  const handleLogin = async (e: SyntheticEvent) => {
+    await LoginHandler({
+      e,
+      email,
+      password,
+      token,
+      navigate,
+      alertSuccess,
+      alertError,
+    });
   };
 
   // demo handler
-  const handleDemoClick = async (e:SyntheticEvent) => {
+  const handleDemoClick = async (e: SyntheticEvent) => {
     const email = "demouser@gmail.com";
     const password = "demo@123";
-    await LoginHandler({e, email, password, token, navigate, alertSuccess, alertError});
+    await LoginHandler({
+      e,
+      email,
+      password,
+      token,
+      navigate,
+      alertSuccess,
+      alertError,
+    });
   };
 
   return (
@@ -109,10 +125,11 @@ export default function SignIn() {
 
                 <p className="text-sm text-slate-100">-------- OR -------</p>
                 {/* DEMO SIGNIN */}
-                <button onClick={handleDemoClick}
+                <button
+                  onClick={handleDemoClick}
                   className="w-full py-1 my-2 bg-blue-900 text-white rounded hover:bg-blue-800"
                 >
-                    Login as a Guest 
+                  Login as a Guest
                 </button>
               </div>
             </div>
