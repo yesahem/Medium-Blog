@@ -28,7 +28,7 @@ export default function Home() {
                 putting what you have into it."
               </p>
               { isLogin === 'true' ? <Link
-                to="/blogs"
+                to="/upload-blogs"
                 className="inline-block mt-8 px-6 py-3 bg-blue-500 text-white text-lg rounded hover:bg-blue-600"
               >
                 Start Uploading Blogs
