@@ -4,6 +4,7 @@ import Header from "../components/Headers";
 // import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 export default function Home() {
+  const isLogin = localStorage.getItem('isLogin');
   return (
     <div>
 
@@ -26,12 +27,17 @@ export default function Home() {
                 "Blogging is not rocket science. It’s about being yourself and
                 putting what you have into it."
               </p>
-              <Link
+              { isLogin === 'true' ? <Link
+                to="/blogs"
+                className="inline-block mt-8 px-6 py-3 bg-blue-500 text-white text-lg rounded hover:bg-blue-600"
+              >
+                Start Uploading Blogs
+              </Link>:<Link
                 to="/signin"
                 className="inline-block mt-8 px-6 py-3 bg-blue-500 text-white text-lg rounded hover:bg-blue-600"
               >
                 Start Uploading Blogs
-              </Link>
+              </Link>}
             </div>
           </section>
         </main>
