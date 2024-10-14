@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {   BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -25,6 +25,7 @@ const ViewBlog = () => {
   const [ titleValue, setTitleValue ] = useState("")
   const [ contentValue, setContentValue ] = useState("");
   const token = localStorage.getItem("jwt-token");
+  const navigate = useNavigate();
   
   useEffect(() => {
     const fetchPost = async () => {
@@ -78,6 +79,18 @@ const ViewBlog = () => {
   const editHandler = () => {
     setIsOpen(true);
   }
+  const deleteHandler = async () => {
+    await axios.delete(
+      `${BLOG_API_ENDPOINT_PROD}/deletepost/${id}`, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    toast.success('Deleted successfully');
+    navigate('/blog')
+  }
   const submitHandler = async () => {
     await axios.put(
       `${BLOG_API_ENDPOINT_PROD}/updatepost`, 
@@ -115,7 +128,7 @@ const ViewBlog = () => {
       <Header />
       <main className="container mx-auto px-4 py-8 lg:max-w-3xl sm:px-6 lg:px-8">
         <article className="mb-12">
-          <div className = 'flex'>
+          <div className = 'flex '>
             {isOpen ? (
               <input value = { titleValue } onChange={(e) => {
                 setTitleValue(e.target.value);
@@ -127,17 +140,22 @@ const ViewBlog = () => {
             )
 
             }
-            {isOpen ? (
-              <div className = 'pl-52 pt-2'>
-                <button onClick = { submitHandler } className = 'w-24 h-10 bg-blue-500 rounded-md  text-white'>submit</button>
-              </div>
-            ):(
+            <div className = 'flex ml-10'>
+              {isOpen ? (
                 <div className = 'pl-52 pt-2'>
-                  <button onClick = { editHandler } className = 'w-28 h-10 bg-blue-500 rounded-md  text-white'>Edit</button>
+                  <button onClick = { submitHandler } className = 'w-24 h-10 bg-blue-500 rounded-md  text-white'>submit</button>
                 </div>
-            )
+              ):(
+                  <div className = 'pl-52 pt-2'>
+                    <button onClick = { editHandler } className = 'w-28 h-10 bg-blue-500 rounded-md  text-white'>Edit</button>
+                  </div>
+              )
+              }
+              <div className = 'pt-2 ml-2'>
+                <button onClick={ deleteHandler } className = 'w-28 h-10 bg-red-500 rounded-md  text-white'>Delete</button>
+              </div>
+            </div>
             
-          }
           </div>
           <div className="flex items-center mb-8 text-sm text-gray-600 dark:text-gray-400">
             <time dateTime={new Date(post.createdAt).toISOString()}>
