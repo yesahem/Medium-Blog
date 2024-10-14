@@ -5,6 +5,7 @@ import {   BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Header from "../components/Headers";
 import { format } from "date-fns";
+import { toast } from "react-custom-alert";
 
 interface BlogPost {
   title: string;
@@ -20,8 +21,11 @@ const ViewBlog = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [ isOpen, setIsOpen ] = useState<Boolean>(false);
+  const [ titleValue, setTitleValue ] = useState("")
+  const [ contentValue, setContentValue ] = useState("");
   const token = localStorage.getItem("jwt-token");
-
+  
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -34,6 +38,12 @@ const ViewBlog = () => {
           }
         );
         setPost(response.data.blog);
+        if(post?.title) {
+          setTitleValue(post?.title);
+        }
+        if(post?.content) {
+          setContentValue(post?.content);
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -42,7 +52,7 @@ const ViewBlog = () => {
       }
     };
     fetchPost();
-  }, [id, token]);
+  }, [id, token, isOpen]);
 
   if (loading) {
     return (
@@ -65,7 +75,27 @@ const ViewBlog = () => {
       </div>
     );
   }
+  const editHandler = () => {
+    setIsOpen(true);
+  }
+  const submitHandler = async () => {
+    await axios.put(
+      `${BLOG_API_ENDPOINT_PROD}/updatepost`, 
+      {
+        id: id,
+        title: titleValue,
+        content: contentValue
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
+    toast.success('updated successfully');
+    setIsOpen(false);
+  }
   if (!post) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -85,9 +115,30 @@ const ViewBlog = () => {
       <Header />
       <main className="container mx-auto px-4 py-8 lg:max-w-3xl sm:px-6 lg:px-8">
         <article className="mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-            {post.title}
-          </h1>
+          <div className = 'flex'>
+            {isOpen ? (
+              <input value = { titleValue } onChange={(e) => {
+                setTitleValue(e.target.value);
+              }} className = 'text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-black border-black border-2 '></input>
+            ): (
+                <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                {post.title}
+              </h1>
+            )
+
+            }
+            {isOpen ? (
+              <div className = 'pl-52 pt-2'>
+                <button onClick = { submitHandler } className = 'w-24 h-10 bg-blue-500 rounded-md  text-white'>submit</button>
+              </div>
+            ):(
+                <div className = 'pl-52 pt-2'>
+                  <button onClick = { editHandler } className = 'w-28 h-10 bg-blue-500 rounded-md  text-white'>Edit</button>
+                </div>
+            )
+            
+          }
+          </div>
           <div className="flex items-center mb-8 text-sm text-gray-600 dark:text-gray-400">
             <time dateTime={new Date(post.createdAt).toISOString()}>
               {format(new Date(post.createdAt), "MMMM d, yyyy")}
@@ -98,7 +149,8 @@ const ViewBlog = () => {
                 post.author.name.slice(1)}
             </span>
           </div>
-          <div className="prose dark:prose-invert max-w-none">
+        {!isOpen ? (
+            <div className="prose dark:prose-invert max-w-none">
             {post.content
               .split("\n\n")
               .map((paragraph: string, index: number) => (
@@ -110,6 +162,13 @@ const ViewBlog = () => {
                 </p>
               ))}
           </div>
+          ): (
+            <textarea value = { contentValue } className = 'w-[100%] h-40 p-[10px]' onChange = {(e) => {
+              setContentValue(e.target.value);
+            }}></textarea>
+
+          )}
+
         </article>
         <div className="mt-8">
           <Link
