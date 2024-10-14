@@ -78,7 +78,7 @@ const ViewBlog = () => {
   const editHandler = () => {
     setIsOpen(true);
   }
-  const SumbitHandler = async () => {
+  const submitHandler = async () => {
     await axios.put(
       `${BLOG_API_ENDPOINT_PROD}/updatepost`, 
       {
@@ -119,7 +119,7 @@ const ViewBlog = () => {
             {isOpen ? (
               <input value = { titleValue } onChange={(e) => {
                 setTitleValue(e.target.value);
-              }} className = 'text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100 border-black border-2 '></input>
+              }} className = 'text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-black border-black border-2 '></input>
             ): (
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100">
                 {post.title}
@@ -129,7 +129,7 @@ const ViewBlog = () => {
             }
             {isOpen ? (
               <div className = 'pl-52 pt-2'>
-                <button onClick = { SumbitHandler } className = 'w-24 h-10 bg-blue-500 rounded-md  text-white'>Sumbit</button>
+                <button onClick = { submitHandler } className = 'w-24 h-10 bg-blue-500 rounded-md  text-white'>submit</button>
               </div>
             ):(
                 <div className = 'pl-52 pt-2'>
