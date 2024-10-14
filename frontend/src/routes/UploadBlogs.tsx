@@ -31,15 +31,16 @@ export default function UploadBlogs() {
         }
       );
       console.log("Response after blog upload:", res);
-      navigate("/blog");
+      // Redirect to the blog page after successful upload
+      navigate("/blog"); // Adjust the path as needed
     } catch (err) {
       console.error("Error uploading blog:", err);
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
         <div className="flex items-center">
           <DarkModeToggle />
         </div>
@@ -53,7 +54,7 @@ export default function UploadBlogs() {
                   Upload your Blog
                 </h1>
                 <div className="items-center justify-center flex">
-                  <p className="max-w-lg text-gray-600 dark:text-gray-300 md:text-xl justify-center">
+                  <p className="max-w-lg text-gray-500 md:text-xl justify-center dark:text-gray-300">
                     Blogging is an art, Be an artist
                   </p>
                 </div>
@@ -70,7 +71,7 @@ export default function UploadBlogs() {
                       placeholder="Title"
                       required
                       onChange={(e) => setTitle(e.target.value)}
-                      className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+                      className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
                   </div>
                   <div className="space-y-2">
@@ -82,13 +83,13 @@ export default function UploadBlogs() {
                       placeholder="Content"
                       required
                       onChange={(e) => setContent(e.target.value)}
-                      className="block w-full p-2 border rounded min-h-48 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+                      className="block w-full p-2 border rounded min-h-48 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
                   </div>
                   <div className="mt-4">
                     <button
                       type="submit"
-                      className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                      className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     >
                       Upload
                     </button>
