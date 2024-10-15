@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle";
 import { USER_API_ENDPOINT_PROD } from "../utils/env";
-import {} from "@shishuranjan/backend-common/dist/validations";
 import { SignUpFormData, signUpSchema } from "../utils";
 
 const alertSuccess = () =>

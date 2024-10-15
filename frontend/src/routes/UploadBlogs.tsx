@@ -6,6 +6,7 @@ import DarkModeToggle from "../components/DarkModeToggle";
 import { BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { useNavigate } from "react-router-dom";
 import { BlogFormData, blogSchema } from "../utils";
+import { toast } from "react-custom-alert";
 
 export default function UploadBlogs() {
   const navigate = useNavigate();
@@ -30,10 +31,12 @@ export default function UploadBlogs() {
       ),
     onSuccess: (res) => {
       console.log("Response after blog upload:", res);
+      toast.success("Blog uploaded successfully");
       navigate("/blog");
     },
     onError: (error) => {
       console.error("Error uploading blog:", error);
+      toast.error("An error occurred during blog upload");
     },
   });
 
