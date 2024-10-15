@@ -3,6 +3,7 @@ import { SyntheticEvent, useState } from "react";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 import {   BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-custom-alert";
 
 export default function UploadBlogs() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function UploadBlogs() {
       );
       console.log("Response after blog upload:", res);
       // Redirect to the blog page after successful upload
+      toast.success("Blog uploaded sucessfully");
       navigate("/blog"); // Adjust the path as needed
     } catch (err) {
       console.error("Error uploading blog:", err);
