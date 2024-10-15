@@ -1,54 +1,51 @@
 import axios from "axios";
-import { SyntheticEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import DarkModeToggle from "../components/DarkModeToggle";
 import { USER_API_ENDPOINT_PROD } from "../utils/env";
+import { SignInFormData, signInSchema } from "../utils";
 
 const alertSuccess = () => toast.success("Login Success");
 const alertError = (str: string) => toast.error(str);
 
-const token = localStorage.getItem("jwt-token");
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+  });
 
-  async function signinHandler(e: SyntheticEvent) {
-    e.preventDefault();
-    console.log("email: ", email);
-    console.log("password: ", password);
-    console.log("you are here");
-
-    axios
-      .post(
-        `${USER_API_ENDPOINT_PROD}/signin`,
-        {
-          email,
-          password,
+  const signInMutation = useMutation({
+    mutationFn: (data: SignInFormData) =>
+      axios.post(`${USER_API_ENDPOINT_PROD}/signin`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.token) {
-          console.log("Login Response is:", res);
-          alertSuccess();
-          localStorage.setItem("jwt-token", res.data.token);
-          localStorage.setItem("isLogin", "true");
-          navigate("/blog");
-        } else {
-          alertError("Incorrect credentials");
-        }
+      }),
+    onSuccess: (res) => {
+      if (res.data.token) {
+        console.log("Login Response is:", res);
+        alertSuccess();
+        localStorage.setItem("jwt-token", res.data.token);
+        localStorage.setItem("isLogin", "true");
+        navigate("/blog");
+      } else {
+        alertError("Incorrect credentials");
       }
-    )
-  }
+    },
+    onError: (error) => {
+      console.error("Login error:", error);
+      alertError("An error occurred during sign in");
+    },
+  });
+
+  const onSubmit = (data: SignInFormData) => {
+    signInMutation.mutate(data);
+  };
 
   return (
     <main className="flex-1 bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -69,7 +66,7 @@ export default function SignIn() {
               </p>
             </div>
             <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-              <div className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                     Email
@@ -78,12 +75,10 @@ export default function SignIn() {
                     id="email"
                     type="email"
                     placeholder="yourmail@example.com"
-                    required
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
+                    {...register("email")}
                     className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
+                  {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -92,23 +87,22 @@ export default function SignIn() {
                   <input
                     id="password"
                     type="password"
-                    required
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
+                    {...register("password")}
                     className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Your password"
                   />
+                  {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                 </div>
-              </div>
-              <div className="mt-4">
-                <button
-                  className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
-                  onClick={signinHandler}
-                >
-                  Sign in
-                </button>
-              </div>
+                <div className="mt-4">
+                  <button
+                    type="submit"
+                    disabled={signInMutation.isPending}
+                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 disabled:bg-blue-300"
+                  >
+                    {signInMutation.isPending ? "Signing in..." : "Sign in"}
+                  </button>
+                </div>
+              </form>
             </div>
             <div className="mt-4 pl-[120px] text-sm text-gray-600 dark:text-gray-400">
               Don&apos;t have an account?{" "}

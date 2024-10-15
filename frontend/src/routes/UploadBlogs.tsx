@@ -1,27 +1,25 @@
 import axios from "axios";
-import { SyntheticEvent, useState } from "react";
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import {   BLOG_API_ENDPOINT_PROD } from "../utils/env";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
+import DarkModeToggle from "../components/DarkModeToggle";
+import { BLOG_API_ENDPOINT_PROD } from "../utils/env";
 import { useNavigate } from "react-router-dom";
+import { BlogFormData, blogSchema } from "../utils";
 
 export default function UploadBlogs() {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm<BlogFormData>({
+    resolver: zodResolver(blogSchema),
+  });
   const token = localStorage.getItem("jwt-token");
 
-  const blogUploadHandler = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    console.log("I am a blog upload handler");
-    console.log(`Title: ${title}`);
-    console.log(`Content: ${content}`);
-
-    try {
-      const res = await axios.post(
+  const uploadBlogMutation = useMutation({
+    mutationFn: (data: BlogFormData) =>
+      axios.post(
         `${BLOG_API_ENDPOINT_PROD}/createpost`,
         {
-          title: title,
-          content: content,
+          ...data,
           published: true,
         },
         {
@@ -29,24 +27,25 @@ export default function UploadBlogs() {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
+      ),
+    onSuccess: (res) => {
       console.log("Response after blog upload:", res);
-      // Redirect to the blog page after successful upload
-      navigate("/blog"); // Adjust the path as needed
-    } catch (err) {
-      console.error("Error uploading blog:", err);
-    }
+      navigate("/blog");
+    },
+    onError: (error) => {
+      console.error("Error uploading blog:", error);
+    },
+  });
+
+  const onSubmit = (data: BlogFormData) => {
+    uploadBlogMutation.mutate(data);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-      {" "}
-      {/* Added dark mode class */}
       <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
-        {" "}
-        {/* Added dark mode class */}
         <div className="flex items-center">
-          <DarkModeToggle /> {/* Added DarkModeToggle component */}
+          <DarkModeToggle />
         </div>
       </header>
       <div className="flex-1 flex justify-center items-center">
@@ -55,54 +54,47 @@ export default function UploadBlogs() {
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold text-center tracking-tight sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100">
-                  {" "}
-                  {/* Added dark mode class */}
                   Upload your Blog
                 </h1>
                 <div className="items-center justify-center flex">
                   <p className="max-w-lg text-gray-500 md:text-xl justify-center dark:text-gray-300">
-                    {" "}
-                    {/* Added dark mode class */}
                     Blogging is an art, Be an artist
                   </p>
                 </div>
               </div>
               <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg mx-auto border-2 border-green-400">
-                {" "}
-                {/* Added dark mode class */}
-                <form className="space-y-4" onSubmit={blogUploadHandler}>
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                   <div className="space-y-2">
-                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {/* Added dark mode class */}
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                       Title
-                    </div>
+                    </label>
                     <input
-                      autoFocus
+                      id="title"
+                      {...register("title")}
                       placeholder="Title"
-                      required
-                      onChange={(e) => setTitle(e.target.value)} // try to implement debouncing here to wait for some time and then change the title and content
-                      className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100" // Added dark mode class
+                      className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
+                    {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
                   </div>
                   <div className="space-y-2">
-                    <div className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {" "}
-                      {/* Added dark mode class */}
+                    <label htmlFor="content" className="block text-sm font-medium text-gray-900 dark:text-gray-100">
                       Your Content Here
-                    </div>
+                    </label>
                     <textarea
+                      id="content"
+                      {...register("content")}
                       placeholder="Content"
-                      required
-                      onChange={(e) => setContent(e.target.value)}
-                      className="block w-full p-2 border rounded min-h-48 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100" // Added dark mode class
+                      className="block w-full p-2 border rounded min-h-48 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                     />
+                    {errors.content && <span className="text-red-500 text-sm">{errors.content.message}</span>}
                   </div>
                   <div className="mt-4">
                     <button
                       type="submit"
-                      className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      disabled={uploadBlogMutation.isPending}
+                      className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-blue-300"
                     >
-                      Upload
+                      {uploadBlogMutation.isPending ? "Uploading..." : "Upload"}
                     </button>
                   </div>
                 </form>
