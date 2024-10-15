@@ -6,8 +6,9 @@ import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import "react-custom-alert/dist/index.css";
 import { BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD } from "../utils/env";
+import { useQuery } from "@tanstack/react-query";
 
-interface posts {
+interface Post {
   id: string;
   title: string;
   content: string;
@@ -16,83 +17,80 @@ interface posts {
 }
 
 export default function Blog() {
-  const [posts, setPosts] = useState([]);
-  const [description2, setDescription] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [userName, setUserName] = useState("");
   const [token, setToken] = useState(
     localStorage.getItem("jwt-token") || undefined || null
   );
 
-  // Function to fetch user's Name information based on JWT token
   const fetchUserInfo = async (token: string | null) => {
-    if (!token) return;
-
-    try {
-      const response = await axios.get(
-        `${USER_API_ENDPOINT_PROD}/getUserInfo`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Response", response);
-      console.log("Setting name", response.data.user.name);
-      setUserName(response.data.user.name);
-    } catch (error) {
-      toast.error("Error fetching user info");
-    }
+    if (!token) return null;
+    const response = await axios.get(
+      `${USER_API_ENDPOINT_PROD}/getUserInfo`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.user;
   };
 
+  const { data: userInfo, isError : userError } = useQuery({
+    queryKey: ['userInfo', token],
+    queryFn: () => fetchUserInfo(token),
+    enabled: !!token,
+  });
+
   useEffect(() => {
-    fetchUserInfo(token);
+    if (userInfo) {
+      setUserName(userInfo.name);
+    }
+  }, [userInfo]);
+
+  const fetchPosts = async () => {
+    const response = await axios.get(`${BLOG_API_ENDPOINT_PROD}/bulk`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.posts;
+  };
+
+  const { data: posts, isLoading, isError : postError } = useQuery({
+    queryKey: ['posts', token],
+    queryFn: fetchPosts,
+    enabled: !!token,
+  });
+
+  useEffect(() => {
+    if (posts && posts.length === 0) {
+      setShowMessage(true);
+    }
+  }, [posts]);
+
+  useEffect(() => {
     const handleStorageChange = () => {
       const newToken = localStorage.getItem("jwt-token");
       if (newToken !== token) {
         setToken(newToken);
-        fetchUserInfo(newToken); // Fetch new user info when token changes
       }
     };
     window.addEventListener("storage", handleStorageChange);
 
-    // Clean up event listener on component unmount
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, [token]);
 
-  useEffect(() => {
-    axios
-      .get(`${BLOG_API_ENDPOINT_PROD}/bulk`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log("print response ", res);
-        console.log(`Posts length:`, res.data.posts.length);
-        if (res.data.posts.length === 0 || res.data.posts) {
-          setShowMessage(true);
-          setPosts([]);
-        }
-        setPosts(res.data.posts);
-        const description = res.data.posts.map((post: { title: string }) => {
-          setDescription(post.title.substring(0, 5));
-        });
-        console.log("description is", description);
-        console.log("description2 is", description2);
-      })
-      .catch((err) => {
-        console.log("Error in get axios");
-        console.log(err);
-      });
-  }, [description2, token]);
-
   const truncateContent = (content: string, length: number) => {
     if (content.length <= length) return content;
     return content.substring(0, length) + "...";
   };
+
+  if(postError || userError) {
+    toast.error("Error loading posts. Please try again later.");
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -100,7 +98,6 @@ export default function Blog() {
       <div className="flex flex-col">
         <main className="flex-1 flex flex-col items-center py-8">
           <section className="w-full max-w-5xl px-4 md:px-6">
-            {/* User Info Section */}
             <div className="flex justify-between items-center mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
@@ -120,10 +117,28 @@ export default function Blog() {
               </div>
             </div>
 
-            {/* Posts List */}
             <div className="grid gap-6 lg:grid-cols-2">
-              {posts.length > 0 ? (
-                posts.map((post: posts, index) => (
+              {isLoading ? (
+                <ColorRing
+                  visible={true}
+                  height="40"
+                  width="40"
+                  ariaLabel="color-ring-loading"
+                  wrapperClass="color-ring-wrapper"
+                  colors={[
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                    "#0390fc",
+                  ]}
+                />
+              ) : postError ? (
+                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between text-gray-600 dark:text-gray-300">
+                  Error loading posts. Please try again later.
+                </div>
+              ) : posts && posts.length > 0 ? (
+                posts.map((post: Post, index: number) => (
                   <div
                     key={index}
                     className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
@@ -148,22 +163,7 @@ export default function Blog() {
                 <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between text-gray-600 dark:text-gray-300">
                   Start uploading Blog to get started 🎉
                 </div>
-              ) : (
-                <ColorRing
-                  visible={true}
-                  height="40"
-                  width="40"
-                  ariaLabel="color-ring-loading"
-                  wrapperClass="color-ring-wrapper"
-                  colors={[
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                    "#0390fc",
-                  ]}
-                />
-              )}
+              ) : null}
             </div>
           </section>
         </main>
