@@ -1,69 +1,52 @@
 import axios from "axios";
-import { SyntheticEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
-import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import DarkModeToggle from "../components/DarkModeToggle";
 import { USER_API_ENDPOINT_PROD } from "../utils/env";
+import { SignUpFormData, signUpSchema } from "../utils";
 
 const alertSuccess = () =>
   toast.success("Signup Successful, Redirecting to Login");
 const alertError = (str: string) => toast.error(str);
 
-/*
-async function hashUsersPassword(usersPassword: string) {
-  const hashedPassword = await bcrypt.hash(usersPassword, 0);
-  console.log(`hashedPassword is ${hashedPassword}`);
-
-  return hashedPassword.toString();
-}
-*/
-
 export default function SignUp() {
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-
   const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+  });
 
-  async function signupHandler(e: SyntheticEvent) {
-    e.preventDefault();
-    console.log("name: ", name);
-    console.log("email: ", email);
-    console.log("password: ", password);
-    //    const hashedPassword = await hashUsersPassword(password);
+  const signUpMutation = useMutation({
+    mutationFn: (data: SignUpFormData) =>
+      axios.post(`${USER_API_ENDPOINT_PROD}/signup`, data),
+    onSuccess: (res) => {
+      console.log(`Response ${res}`);
+      console.log(res.data.err);
 
-    axios
-      .post(`${USER_API_ENDPOINT_PROD}/signup`, {
-        name: name,
-        email: email,
-        password: password,
-      })
-      .then((res) => {
-        // console.log("current");
-        console.log(`Response ${res}`);
-        console.log(res.data.err);
+      if (!res.data.err) {
+        alertSuccess();
+        setTimeout(() => {
+          navigate("/signin");
+        }, 2000);
+      } else {
+        alertError("Invalid Email or Password");
+      }
+    },
+    onError: (error) => {
+      console.log("err: ", error);
+      alertError("An error occurred during sign up");
+    },
+  });
 
-        // localStorage.setItem("jwt-token", res.data.token);
-        // localStorage.setItem("isLogin", "false");
-
-        if (!res.data.err) {
-          alertSuccess();
-          setTimeout(() => {
-            navigate("/signin");
-          }, 2000);
-        } else {
-          alertError("Invalid Email or Password");
-        }
-      })
-      .catch((err) => {
-        console.log("err: ", err);
-        alertError(err.response.data.message);
-      });
-  }
+  const onSubmit = (data: SignUpFormData) => {
+    signUpMutation.mutate(data);
+  };
 
   return (
-    <main className="flex-1 bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
           <DarkModeToggle />
@@ -81,7 +64,7 @@ export default function SignUp() {
               </p>
             </div>
             <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <label
                     htmlFor="name"
@@ -93,12 +76,10 @@ export default function SignUp() {
                     id="name"
                     type="text"
                     placeholder="Your name"
-                    required
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
+                    {...register("name")}
                     className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
+                  {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
                 </div>
                 <div className="space-y-2">
                   <label
@@ -111,12 +92,10 @@ export default function SignUp() {
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    required
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
+                    {...register("email")}
                     className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
+                  {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
                 </div>
                 <div className="space-y-2">
                   <label
@@ -128,21 +107,19 @@ export default function SignUp() {
                   <input
                     id="password"
                     type="password"
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                    }}
+                    {...register("password")}
                     placeholder="Create a password"
-                    required
                     className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
+                  {errors.password && <span className="text-red-500 text-sm">{errors.password.message}</span>}
                 </div>
                 <div className="mt-4">
                   <button
-                    onClick={signupHandler}
                     type="submit"
-                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                    disabled={signUpMutation.isPending}
+                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200 disabled:bg-blue-300"
                   >
-                    Sign Up
+                    {signUpMutation.isPending ? "Signing Up..." : "Sign Up"}
                   </button>
                 </div>
               </form>
@@ -170,6 +147,6 @@ export default function SignUp() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
