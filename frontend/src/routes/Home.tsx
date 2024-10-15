@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Headers";
-// import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
 
 export default function Home() {
   const isLogin = localStorage.getItem('isLogin');
   return (
-    <div>
-
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       <Header />
       <div className="flex flex-col min-h-screen">
         <main className="flex-1 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900"> {/* Added dark mode class */}
@@ -28,7 +26,7 @@ export default function Home() {
                 putting what you have into it."
               </p>
               { isLogin === 'true' ? <Link
-                to="/upload-blogs"
+                to="/blogs"
                 className="inline-block mt-8 px-6 py-3 bg-blue-500 text-white text-lg rounded hover:bg-blue-600"
               >
                 Start Uploading Blogs
@@ -43,6 +41,6 @@ export default function Home() {
         </main>
       </div>
       <Footer />
-    </div>
+      </div>
   );
 }

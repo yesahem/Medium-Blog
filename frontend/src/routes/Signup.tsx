@@ -4,7 +4,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
-import {  USER_API_ENDPOINT_PROD } from "../utils/env";
+import { USER_API_ENDPOINT_PROD } from "../utils/env";
 
 const alertSuccess = () =>
   toast.success("Signup Successful, Redirecting to Login");
@@ -63,14 +63,10 @@ export default function SignUp() {
   }
 
   return (
-    <main className="flex-1 bg-gray-100 dark:bg-gray-900">
-      {" "}
-      {/* Added dark mode class */}
-      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800">
-        {" "}
-        {/* Added dark mode class */}
+    <main className="flex-1 bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <header className="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
-          <DarkModeToggle /> {/* Added DarkModeToggle component */}
+          <DarkModeToggle />
         </div>
       </header>
       <section className="w-full py-12 md:py-24 lg:py-32">
@@ -78,27 +74,19 @@ export default function SignUp() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold sm:text-5xl xl:text-6xl text-gray-900 dark:text-gray-100">
-                {" "}
-                {/* Added dark mode class */}
                 Create a new account
               </h1>
-              <p className="max-w-md text-gray-500 md:text-xl dark:text-gray-300">
-                {" "}
-                {/* Added dark mode class */}
+              <p className="max-w-md text-gray-500 dark:text-gray-400 md:text-xl">
                 Enter your details to create a new account.
               </p>
             </div>
             <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-              {" "}
-              {/* Added dark mode class */}
               <form className="space-y-4">
                 <div className="space-y-2">
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-900 dark:text-gray-100"
                   >
-                    {" "}
-                    {/* Added dark mode class */}
                     Name
                   </label>
                   <input
@@ -109,7 +97,7 @@ export default function SignUp() {
                     onChange={(e) => {
                       setName(e.target.value);
                     }}
-                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100" // Added dark mode class
+                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -117,8 +105,6 @@ export default function SignUp() {
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-900 dark:text-gray-100"
                   >
-                    {" "}
-                    {/* Added dark mode class */}
                     Email
                   </label>
                   <input
@@ -129,7 +115,7 @@ export default function SignUp() {
                     onChange={(e) => {
                       setEmail(e.target.value);
                     }}
-                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100" // Added dark mode class
+                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -137,8 +123,6 @@ export default function SignUp() {
                     htmlFor="password"
                     className="block text-sm font-medium text-gray-900 dark:text-gray-100"
                   >
-                    {" "}
-                    {/* Added dark mode class */}
                     Password
                   </label>
                   <input
@@ -149,25 +133,23 @@ export default function SignUp() {
                     }}
                     placeholder="Create a password"
                     required
-                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100" // Added dark mode class
+                    className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div className="mt-4">
                   <button
                     onClick={signupHandler}
                     type="submit"
-                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
                   >
                     Sign Up
                   </button>
                 </div>
               </form>
             </div>
-            <div className="mt-4 text-center text-sm text-gray-900 dark:text-gray-100">
-              {" "}
-              {/* Added dark mode class */}
+            <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
               Already have an account?{" "}
-              <Link to="/signin" className="underline">
+              <Link to="/signin" className="underline text-blue-500 hover:text-blue-600">
                 Sign in
               </Link>
             </div>
@@ -175,16 +157,13 @@ export default function SignUp() {
           <div className="mt-4 text-center">
             <div className="mt-[15px] text-center justify-center">
               <h3 className="text-9xl font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100">
-                {" "}
-                {/* Added dark mode class */}
-                “Be yourself; everyone else is already taken.”
+                "Be yourself; everyone else is already taken."
                 <br />
               </h3>
               <br />{" "}
               <i>
                 <h5 className="text-md font-bold sm:text-5xl xl:text-6xl text-center text-gray-900 dark:text-gray-100">
-                  {" "}
-                  {/* Added dark mode class */} ― Oscar Wilde{" "}
+                  ― Oscar Wilde{" "}
                 </h5>
               </i>
             </div>

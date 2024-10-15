@@ -5,8 +5,7 @@ import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import "react-custom-alert/dist/index.css";
-import {   BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD} from "../utils/env";
-// import DarkModeToggle from "../components/DarkModeToggle"; // Import the DarkModeToggle component
+import { BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD } from "../utils/env";
 
 interface posts {
   id: string;
@@ -15,9 +14,6 @@ interface posts {
   published: boolean;
   authorId: string;
 }
-
-const token = localStorage.getItem("jwt-token");
-console.log(`this is your token ${token}`);
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
@@ -99,29 +95,25 @@ export default function Blog() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <Header />
-      <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-        {" "}
-        {/* Added dark mode class */}
+      <div className="flex flex-col">
         <main className="flex-1 flex flex-col items-center py-8">
-          <section className="w-full max-w-5xl">
+          <section className="w-full max-w-5xl px-4 md:px-6">
             {/* User Info Section */}
-            <div className="flex justify-between items-center mb-8 p-6 rounded-lg">
+            <div className="flex justify-between items-center mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                   Welcome Back {userName.charAt(0).toUpperCase() + userName.slice(1)}
                 </h1>
-                {/* Added dark mode class */}
                 <p className="text-gray-600 dark:text-gray-300">
                   Here are your blog posts:
                 </p>
-                {/* Added dark mode class */}
               </div>
               <div>
                 <Link
                   to="/upload-blogs"
-                  className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                  className="inline-block px-6 py-3 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors duration-200"
                 >
                   Create New Post
                 </Link>
@@ -134,19 +126,15 @@ export default function Blog() {
                 posts.map((post: posts, index) => (
                   <div
                     key={index}
-                    className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex flex-col justify-between"
+                    className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex flex-col justify-between"
                   >
-                    {" "}
-                    {/* Added dark mode class */}
                     <div>
                       <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
                         {post.title}
                       </h2>
-                      {/* Added dark mode class */}
                       <p className="text-gray-600 dark:text-gray-300 mb-4">
                         {truncateContent(post.content, 100)}
                       </p>
-                      {/* Added dark mode class */}
                     </div>
                     <Link
                       to={`/view-blog/${post.id}`}
@@ -157,9 +145,8 @@ export default function Blog() {
                   </div>
                 ))
               ) : showMessage ? (
-                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border flex justify-between">
-                  {/* Added dark mode class */}
-                  Start uploading Blog to get started 🎉{" "}
+                <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between text-gray-600 dark:text-gray-300">
+                  Start uploading Blog to get started 🎉
                 </div>
               ) : (
                 <ColorRing
