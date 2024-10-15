@@ -36,7 +36,7 @@ export default function Blog() {
     return response.data.user;
   };
 
-  const { data: userInfo, isError } = useQuery({
+  const { data: userInfo, isError : userError } = useQuery({
     queryKey: ['userInfo', token],
     queryFn: () => fetchUserInfo(token),
     enabled: !!token,
@@ -57,7 +57,7 @@ export default function Blog() {
     return response.data.posts;
   };
 
-  const { data: posts, isLoading, isError : foo } = useQuery({
+  const { data: posts, isLoading, isError : postError } = useQuery({
     queryKey: ['posts', token],
     queryFn: fetchPosts,
     enabled: !!token,
@@ -88,7 +88,7 @@ export default function Blog() {
     return content.substring(0, length) + "...";
   };
 
-  if(foo || isError) {
+  if(postError || userError) {
     toast.error("Error loading posts. Please try again later.");
   }
 
@@ -133,7 +133,7 @@ export default function Blog() {
                     "#0390fc",
                   ]}
                 />
-              ) : isError ? (
+              ) : postError ? (
                 <div className="bg-white dark:bg-gray-800 p-6 shadow rounded-lg border border-gray-200 dark:border-gray-700 flex justify-between text-gray-600 dark:text-gray-300">
                   Error loading posts. Please try again later.
                 </div>
