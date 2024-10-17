@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blogs Hub</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f2f2f2;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .blog-post {
+            padding: 30px;
+        }
+
+        .post-title {
+            font-size: 28px; /* Larger title */
+            margin-bottom: 15px;
+            color: #007BFF; /* Attractive blue color */
+        }
+
+        .publish-date {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            font-size: 14px; /* Adjusted content size */
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .post-content p {
+            margin: 0 0 15px; /* Space between paragraphs */
+            padding: 10px;
+            background-color: #f9f9f9; /* Light background for paragraphs */
+            border-left: 4px solid #007BFF; /* Accent line */
+        }
+
+        @media (max-width: 600px) {
+            .post-title {
+                font-size: 24px; /* Responsive title size */
+            }
+
+            .publish-date {
+                font-size: 14px; /* Responsive date size */
+            }
+
+            .post-content {
+                font-size: 12px; /* Responsive content size */
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const blogTitle = "My Blog Post Title";
+            const publishDate = new Date().toLocaleDateString();
+            const blogContent = [
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at dolor vitae elit tempus dictum.",
+                "Sed consequat, nisi eget cursus efficitur, velit neque fermentum quam, vitae congue eros quam a arcu.",
+                "Nullam vel ligula vel lacus cursus tincidunt. Sed vehicula, ante nec cursus ultricies, justo lacus hendrerit ligula."
+            ];
+
+            const root = document.getElementById("root");
+            root.innerHTML = `
+                <div class="container">
+                    <div class="blog-post">
+                        <h1 class="post-title"><strong>${blogTitle}</strong></h1>
+                        <p class="publish-date">Published on: <span>${publishDate}</span></p>
+                        <div class="post-content">
+                            ${blogContent.map(paragraph => `<p>${paragraph}</p>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+
+</html>
