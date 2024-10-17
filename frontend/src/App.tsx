@@ -9,7 +9,8 @@ import Fetch from "./components/Fetch";
 // import { lazy, Suspense } from "react";
 import UploadBlogs from "./routes/UploadBlogs";
 import BlogView from "./routes/BlogView";
-import Error from "./components/Error"
+import Error from "./components/Error";
+// import BlogPostTemplate from './components/TemplateForBlogs'
 // import Test2 from "./routes/Test2";
 
 //const Test = lazy(() => import("./routes/Test"));
@@ -101,6 +102,12 @@ const routes = createBrowserRouter([
           //</Suspense>
         ),
       },
+      // {
+      //   path: "blog-template/:id",
+      //   element: (
+      //     <BlogPostTemplate />
+      //   ),
+      // },
     ],
   },
 ]);
