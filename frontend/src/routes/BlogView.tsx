@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { BLOG_API_ENDPOINT_PROD } from "../utils/env";
+import { BLOG_API_ENDPOINT_LOCAL } from "../utils/env";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Header from "../components/Headers";
 import { format } from "date-fns";
@@ -16,6 +16,7 @@ interface BlogPost {
   author: {
     name: string;
   };
+  imageUrls: string[]; // Added to handle image URLs
 }
 
 const ViewBlog: React.FC = () => {
@@ -23,11 +24,13 @@ const ViewBlog: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [titleValue, setTitleValue] = useState("");
   const [contentValue, setContentValue] = useState("");
+  const [modalOpen, setModalOpen] = useState<boolean>(false); // State to control modal
+  const [selectedImage, setSelectedImage] = useState<string>(""); // State for selected image
   const token = localStorage.getItem("jwt-token");
   const navigate = useNavigate();
 
   const fetchPost = async (): Promise<BlogPost> => {
-    const response = await axios.get(`${BLOG_API_ENDPOINT_PROD}/get/${id}`, {
+    const response = await axios.get(`${BLOG_API_ENDPOINT_LOCAL}/get/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -50,7 +53,7 @@ const ViewBlog: React.FC = () => {
   const updateMutation = useMutation({
     mutationFn: async (updatedPost: Partial<BlogPost>) => {
       await axios.put(
-        `${BLOG_API_ENDPOINT_PROD}/updatepost`,
+        `${BLOG_API_ENDPOINT_LOCAL}/updatepost`,
         updatedPost,
         {
           headers: {
@@ -71,7 +74,7 @@ const ViewBlog: React.FC = () => {
   const deleteMutation = useMutation({
     mutationFn: async () => {
       await axios.delete(
-        `${BLOG_API_ENDPOINT_PROD}/deletepost/${id}`,
+        `${BLOG_API_ENDPOINT_LOCAL}/deletepost/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -98,6 +101,16 @@ const ViewBlog: React.FC = () => {
 
   const submitHandler = () => {
     updateMutation.mutate({ id, title: titleValue, content: contentValue });
+  };
+
+  const openModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedImage(""); // Reset selected image
   };
 
   if (isLoading) {
@@ -197,6 +210,20 @@ const ViewBlog: React.FC = () => {
                     {paragraph}
                   </p>
                 ))}
+              {/* Display image thumbnails if available */}
+              {post.imageUrls && post.imageUrls.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  {post.imageUrls.map((url, index) => (
+                    <img 
+                      key={index} 
+                      src={url} 
+                      alt={`Blog image ${index + 1}`} 
+                      className="w-full h-32 object-cover rounded-md shadow cursor-pointer" 
+                      onClick={() => openModal(url)} // Open modal on click
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <textarea 
@@ -206,6 +233,19 @@ const ViewBlog: React.FC = () => {
             />
           )}
         </article>
+
+        {/* Modal for displaying selected image */}
+        {modalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50" onClick={closeModal}>
+            <img 
+              src={selectedImage} 
+              alt="Selected" 
+              className="max-w-full max-h-full object-contain" 
+              onClick={(e) => e.stopPropagation()} // Prevent modal close when clicking on image
+            />
+          </div>
+        )}
+
         <div className="mt-8">
           <Link
             to="/blog"

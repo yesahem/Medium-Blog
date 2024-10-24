@@ -7,7 +7,7 @@ const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.use("*", cors());
 
-app.route("/api/v1/blog", blogRouter);
+app.route("/api/v1/blog",blogRouter);
 app.route("/api/v1/user", userRouter);
 
 app.get("/health", (c) => {

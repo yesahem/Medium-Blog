@@ -16,14 +16,40 @@ export const blogsRouter = new Hono<{
 
 const factory = createFactory();
 
-// Create Blog Handler
 export const createBlogHandler = factory.createHandlers(async (c) => {
   const user = c.get("user");
-  const body: BlogSchema = await c.req.json();
+  const bucket = c.env.MY_BUCKET;
 
-  if (!body) {
-    c.status(411);
+  const formData = await c.req.formData();
+  const title = formData.get("title");
+  const content = formData.get("content");
+  const published = formData.get("published") === 'true';
+
+  if (!title || !content) {
+    c.status(400);
     return c.json({ message: "Invalid Inputs" });
+  }
+
+  const uploadedFileNames: string[] = [];
+
+  // Use a for...of loop to iterate over the keys in FormData
+  for (const key of formData.keys()) {
+    const value = formData.get(key); // Get the value for the current key
+    console.log(value);
+    // Check if the key starts with "picture_"
+    if (key.startsWith("picture_") && value instanceof File) {
+      const file = value as File; // Type assertion to File
+      const fileName = `${Date.now()}-${user.id}-${key}.jpg`; // Unique file name
+
+      // Upload to R2 bucket
+      const res = await bucket.put(fileName, file.stream(), {
+        httpMetadata: {
+          contentType: file.type,
+        },
+      });
+
+      uploadedFileNames.push(fileName); // Store uploaded file name
+    }
   }
 
   const prisma = new PrismaClient({
@@ -32,10 +58,11 @@ export const createBlogHandler = factory.createHandlers(async (c) => {
 
   const blogPost = await prisma.post.create({
     data: {
-      title: body.title,
-      content: body.content,
-      published: body.published,
+      title: title.toString(),
+      content: content.toString(),
+      published: published,
       authorId: user.id,
+      images: uploadedFileNames, // Save uploaded file names
     },
   });
 
@@ -99,6 +126,7 @@ export const getBlogByIdHandler = factory.createHandlers(async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
+  // Fetch the blog post with the specified ID
   const blogWithId = await prisma.post.findFirst({
     where: { id: param },
     include: {
@@ -110,13 +138,24 @@ export const getBlogByIdHandler = factory.createHandlers(async (c) => {
     },
   });
 
+  // Handle case where the blog post is not found
   if (!blogWithId) {
     c.status(404);
     return c.json({ message: "Blog not found" });
   }
 
-  return c.json({ blog: blogWithId });
+  // Set the base URL for local storage (for development)
+  const r2BaseUrl = `https://your-url.r2.dev`; // Replace with your account ID
+  // Generate image URLs
+  const imageUrls = blogWithId.images?.map((imageName: string) => {
+    return `${r2BaseUrl}/${imageName}`; // Construct the full URL for each image
+  });
+
+  // Include image URLs in the response
+  return c.json({ blog: { ...blogWithId, imageUrls } }); // Return blog post along with image URLs
 });
+
+
 
 // Get All Blogs Handler
 export const getAllBlogsHandler = factory.createHandlers(async (c) => {

@@ -6,3 +6,7 @@ export type Bindings = {
 export type Variables = {
   username: string;
 };
+
+export type R2 = {
+  
+}
