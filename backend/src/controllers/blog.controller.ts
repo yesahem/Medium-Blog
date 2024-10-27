@@ -1,10 +1,7 @@
 import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import {
-  BlogSchema,
-  UpdateBlogSchema,
-} from "@shishuranjan/backend-common/dist/validations";
+import { BlogSchema, UpdateBlogSchema } from "@shishuranjan/backend-common/dist/validations";
 import { Bindings, Variables } from "../types/env.types";
 import { createFactory } from "hono/factory";
 import { log } from "console";
@@ -44,7 +41,7 @@ export const createBlogHandler = factory.createHandlers(async (c) => {
 
 // Update Blog Handler
 export const updateBlogHandler = factory.createHandlers(async (c) => {
-  const userid = c.var.userid; // Get the user ID from the context
+  const user = c.var.user; // Get the user ID from the context
   const updatedBody: UpdateBlogSchema = await c.req.json();
 
   if (!updatedBody || (!updatedBody.title && !updatedBody.content)) {
@@ -60,7 +57,7 @@ export const updateBlogHandler = factory.createHandlers(async (c) => {
   const existingBlog = await prisma.post.findUnique({
     where: {
       id: updatedBody.id,
-      authorId: userid, // Ensure the blog belongs to the user
+      authorId: user.id, // Ensure the blog belongs to the user
     },
   });
 
@@ -126,13 +123,12 @@ export const getAllBlogsHandler = factory.createHandlers(async (c) => {
   }).$extends(withAccelerate());
 
   console.log("Prisma client created");
-  
+
   const allPosts = await prisma.post.findMany();
   return c.json({
     message: "This is a route to get all the posts",
     posts: allPosts,
   });
-  
 });
 
 // Delete Blog by ID Handler
@@ -141,8 +137,8 @@ export const deleteBlogHandler = factory.createHandlers(async (c) => {
     datasourceUrl: c.env.DATABASE_URL,
   }).$extends(withAccelerate());
 
-  const userid = c.var.userid; // Get the user ID from the context
-  const { id } = c.req.param(); // Get the blog ID from the request body
+  const user = c.var.user; // Get the user ID from the context
+  const { id } = c.req.param("id"); // Get the blog ID from the request body
 
   // Validate incoming body
   if (!id) {
@@ -154,7 +150,7 @@ export const deleteBlogHandler = factory.createHandlers(async (c) => {
   const existingBlog = await prisma.post.findUnique({
     where: {
       id: id,
-      authorId: userid, // Ensure the blog belongs to the user
+      authorId: user.id, // Ensure the blog belongs to the user
     },
   });
 
