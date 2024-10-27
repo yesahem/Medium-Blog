@@ -28,9 +28,9 @@ const ViewBlog: React.FC = () => {
 
   const fetchPost = async (): Promise<BlogPost> => {
     const response = await axios.get(`${BLOG_API_ENDPOINT_PROD}/get/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
     return response.data.blog;
   };
