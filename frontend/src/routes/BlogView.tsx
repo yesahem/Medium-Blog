@@ -30,10 +30,11 @@ const ViewBlog: React.FC = () => {
   const navigate = useNavigate();
 
   const fetchPost = async (): Promise<BlogPost> => {
+<!-- <<<<<<< dev -->
     const response = await axios.get(`${BLOG_API_ENDPOINT_LOCAL}/get/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-      },
+      
     });
     return response.data.blog;
   };
