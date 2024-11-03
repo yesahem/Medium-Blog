@@ -5,7 +5,7 @@ import axios from "axios";
 import Header from "../components/Headers";
 import { toast } from "react-custom-alert";
 import "react-custom-alert/dist/index.css";
-import { BLOG_API_ENDPOINT_PROD, USER_API_ENDPOINT_PROD } from "../utils/env";
+import { BLOG_API_ENDPOINT_LOCAL, USER_API_ENDPOINT_LOCAL } from "../utils/env";
 import { useQuery } from "@tanstack/react-query";
 
 interface Post {
@@ -26,7 +26,7 @@ export default function Blog() {
   const fetchUserInfo = async (token: string | null) => {
     if (!token) return null;
     const response = await axios.get(
-      `${USER_API_ENDPOINT_PROD}/getUserInfo`,
+      `${USER_API_ENDPOINT_LOCAL}/getUserInfo`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export default function Blog() {
   }, [userInfo]);
 
   const fetchPosts = async () => {
-    const response = await axios.get(`${BLOG_API_ENDPOINT_PROD}/bulk`, {
+    const response = await axios.get(`${BLOG_API_ENDPOINT_LOCAL}/bulk`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

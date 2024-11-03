@@ -6,7 +6,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle";
-import { USER_API_ENDPOINT_PROD } from "../utils/env";
+import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
 import { SignInFormData, signInSchema } from "../utils";
 
 const alertSuccess = () => toast.success("Login Success");
@@ -24,7 +24,7 @@ export default function SignIn() {
 
   const signInMutation = useMutation({
     mutationFn: (data: SignInFormData) =>
-      axios.post(`${USER_API_ENDPOINT_PROD}/signin`, data, {
+      axios.post(`${USER_API_ENDPOINT_LOCAL}/signin`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt-token")}`,
         },

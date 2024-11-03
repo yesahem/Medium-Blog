@@ -6,7 +6,7 @@ import { toast } from "react-custom-alert";
 import { Link, useNavigate } from "react-router-dom";
 import "react-custom-alert/dist/index.css";
 import DarkModeToggle from "../components/DarkModeToggle";
-import { USER_API_ENDPOINT_PROD } from "../utils/env";
+import { USER_API_ENDPOINT_LOCAL } from "../utils/env";
 import { SignUpFormData, signUpSchema } from "../utils";
 
 const alertSuccess = () =>
@@ -25,7 +25,7 @@ export default function SignUp() {
 
   const signUpMutation = useMutation({
     mutationFn: (data: SignUpFormData) =>
-      axios.post(`${USER_API_ENDPOINT_PROD}/signup`, data),
+      axios.post(`${USER_API_ENDPOINT_LOCAL}/signup`, data),
     onSuccess: (res) => {
       console.log(`Response ${res}`);
       console.log(res.data.err);

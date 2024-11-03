@@ -23,6 +23,9 @@ export const blogSchema = z.object({
     .string()
     .min(1, "Content is required")
     .max(10000, "Content must be 10000 characters or less"),
+  pictures: z
+    .array(z.instanceof(File)) // Expect an array of File objects
+    .optional(), // Make pictures optional
 });
 
 export type BlogFormData = z.infer<typeof blogSchema>;
