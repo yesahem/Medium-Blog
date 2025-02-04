@@ -57,10 +57,10 @@ export default function SignUp() {
         </div>
       </header>
       <section className="w-full flex h-[calc(100vh-80px)] px-10 sm:px-20 py-8">
-        <div className="w-full lg:w-1/2 h-full flex justify-center items-center flex-col lg:block relative">
+        <div className="w-1/2 lg:w-1/2 h-full flex justify-center items-center flex-col lg:block relative">
           <div className="w-full text-gray-900 dark:text-gray-100">
             <div>
-              <h1 className="text-xl font-medium sm:text-3xl ">
+              <h1 className="text-xl font-medium sm:text-3xl text-transparent bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 bg-clip-text">
                 Create a new account!
               </h1>
               <p className="text-sm opacity-55 py-2">
@@ -85,7 +85,7 @@ export default function SignUp() {
                   type="text"
                   placeholder="Your name"
                   {...register("name")}
-                  className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 rounded-3xl h-12 p-6  hover:scale-105 hover:shadow-lg hover:shadow-blue-200 transition duration-150 shadow-md ${errors.name?.message ? "shadow-red-200" : "shadow-blue-200"}`}
                 />
                 {errors.name && (
                   <span className="text-red-500 text-sm">
@@ -105,7 +105,7 @@ export default function SignUp() {
                   type="email"
                   placeholder="m@example.com"
                   {...register("email")}
-                  className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 rounded-3xl h-12 p-6  hover:scale-105 hover:shadow-lg hover:shadow-blue-200 transition duration-150 shadow-md ${errors.email?.message ? "shadow-red-200" : "shadow-blue-200"}`}
                 />
                 {errors.email && (
                   <span className="text-red-500 text-sm">
@@ -126,14 +126,16 @@ export default function SignUp() {
                   {...register("password")}
                   placeholder="Create a password"
                   required
-                  className="block w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 rounded-3xl h-12 p-6  hover:scale-105 hover:shadow-lg hover:shadow-blue-200 transition duration-150 shadow-md ${errors.password?.message ? "shadow-red-200" : "shadow-blue-200"}`}
                 />
               </div>
-              <div className="pt-6">
+              <div className="relative group top-6">
+                <div className="absolute w-full -inset-1 bg-gradient-to-r from-red-600 to-purple-600 p-2 rounded-3xl h-12 blur opacity-75 group-hover:opacity-100 transition duration-150 animate-tilt">
+                </div>
                 <button
                   disabled={signUpMutation.isPending}
                   type="submit"
-                  className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                  className="relative w-full bg-blue-500 rounded-3xl h-12 hover:bg-blue-600 transition-colors duration-200"
                 >
                   {signUpMutation.isPending ? "Signing Up..." : "Sign Up"}
                 </button>
@@ -159,7 +161,7 @@ export default function SignUp() {
             </div>
           </div>
         </div>
-        <div className="hidden h-full lg:block w-full sm:w-1/2">
+        <div className="hidden h-full lg:block w-1/2 sm:w-1/2">
           <img src="./writer.svg" alt="writer" className="" />
         </div>
       </section>

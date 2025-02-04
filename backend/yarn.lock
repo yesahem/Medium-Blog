@@ -14,7 +14,7 @@
   resolved "https://registry.npmjs.org/@cloudflare/workers-shared/-/workers-shared-0.3.0.tgz"
   integrity sha512-cqtLW1QiBC/ABaZIhAdyGCsnHHY6pAb6hsVUZg82Co2gQtf/faxRYV1FgpCwUYroTdk6A66xUMSTmFqreKCJow==
 
-"@cloudflare/workers-types@^4.20240529.0", "@cloudflare/workers-types@^4.20240821.1":
+"@cloudflare/workers-types@^4.20240529.0":
   version "4.20240821.1"
   resolved "https://registry.npmjs.org/@cloudflare/workers-types/-/workers-types-4.20240821.1.tgz"
   integrity sha512-icAkbnAqgVl6ef9lgLTom8na+kj2RBw2ViPAQ586hbdj0xZcnrjK7P46Eu08OU9D/lNDgN2sKU/sxhe2iK/gIg==
@@ -62,7 +62,7 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@prisma/client@^5.20.0", "@prisma/client@>=4.16.1":
+"@prisma/client@^5.20.0":
   version "5.20.0"
   resolved "https://registry.npmjs.org/@prisma/client/-/client-5.20.0.tgz"
   integrity sha512-CLv55ZuMuUawMsxoqxGtLT3bEZoa2W8L3Qnp6rDIFWy+ZBrUcOFKdoeGPSnbBqxc3SkdxJrF+D1veN/WNynZYA==
@@ -238,7 +238,7 @@ defu@^6.1.4:
   resolved "https://registry.npmjs.org/defu/-/defu-6.1.4.tgz"
   integrity sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==
 
-esbuild@*, esbuild@0.17.19:
+esbuild@0.17.19:
   version "0.17.19"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.17.19.tgz"
   integrity sha512-XQ0jAPFkK/u3LcVRcvVHQcTIqD6E2H1fvZMA5dQPSOWb3suUbWbfbRf94pjc0bNzRYLfIrDRQXr7X+LHIm5oHw==
@@ -441,7 +441,7 @@ printable-characters@^1.0.42:
   resolved "https://registry.npmjs.org/printable-characters/-/printable-characters-1.0.42.tgz"
   integrity sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==
 
-prisma@*, prisma@^5.20.0:
+prisma@^5.20.0:
   version "5.20.0"
   resolved "https://registry.npmjs.org/prisma/-/prisma-5.20.0.tgz"
   integrity sha512-6obb3ucKgAnsGS9x9gLOe8qa51XxvJ3vLQtmyf52CTey1Qcez3A6W6ROH5HIz5Q5bW+0VpmZb8WBohieMFGpig==
