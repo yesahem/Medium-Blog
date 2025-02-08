@@ -61,7 +61,7 @@ export default function SignIn() {
         <div className="w-full lg:w-1/2 h-full flex justify-center items-center flex-col lg:block relative">
           <div className="w-full text-gray-900 dark:text-gray-100">
             <div>
-              <h1 className="text-xl font-medium sm:text-3xl ">
+              <h1 className="text-xl font-medium sm:text-3xl text-transparent bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 bg-clip-text">
                 Welcome back!
               </h1>
               <p className="text-sm opacity-55 py-2">
@@ -71,7 +71,7 @@ export default function SignIn() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="py-6">
-                <div className="">
+                <div className="w-[80%]">
                   <label
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-900 dark:text-gray-100 py-2"
@@ -83,7 +83,7 @@ export default function SignIn() {
                     type="email"
                     placeholder="yourmail@example.com"
                     {...register("email")}
-                    className="block  w-full lg:w-2/3 p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                    className={`block w-full border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 rounded-3xl h-12 p-6  hover:scale-105 hover:shadow-lg hover:shadow-blue-200 transition duration-150 shadow-md ${errors.email?.message ? "shadow-red-200" : "shadow-blue-200"}`}
                   />
                   {errors.email && (
                     <span className="text-red-500 text-sm">
@@ -92,7 +92,7 @@ export default function SignIn() {
                   )}
                 </div>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 w-[80%]">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-900 dark:text-gray-100"
@@ -103,7 +103,7 @@ export default function SignIn() {
                   id="password"
                   type="password"
                   {...register("password")}
-                  className="block w-full lg:w-2/3 p-2 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500 rounded-3xl h-12 p-6  hover:scale-105 hover:shadow-lg hover:shadow-blue-200 transition duration-150 shadow-md ${errors.password?.message ? "shadow-red-200" : "shadow-blue-200"}`}
                   placeholder="Your password"
                 />
                 {errors.password && (
@@ -112,13 +112,15 @@ export default function SignIn() {
                   </span>
                 )}
               </div>
-              <div className="pt-10">
+              <div className="relative group top-6 w-[80%]">
+                <div className="absolute w-full -inset-1 bg-gradient-to-r from-red-600 to-purple-600 p-2 rounded-3xl h-12 blur opacity-75 group-hover:opacity-100 transition duration-150 animate-tilt">
+                </div>
                 <button
-                  className="w-full lg:w-2/3 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
-                  type="submit"
                   disabled={signInMutation.isPending}
+                  type="submit"
+                  className="relative w-full bg-blue-500 text-white rounded-3xl h-12 hover:bg-blue-600 transition-colors duration-200"
                 >
-                  {signInMutation.isPending ? "Signing in..." : "Sign in"}
+                  {signInMutation.isPending ? "Signing In..." : "Sign In"}
                 </button>
               </div>
             </form>
